@@ -31,65 +31,65 @@ Database terdiri dari **7 tabel berelasi** dengan batasan Foreign Key dan integr
 
 ```mermaid
 erDiagram
-    users ||--|| user_preferences : "has preferences (1:1)"
-    users ||--o{ groups : "creates"
-    users ||--o{ group_members : "joins"
-    groups ||--o{ group_members : "has members"
-    users ||--o{ events : "owns"
-    groups ||--o{ events : "contains shared"
-    recurring_patterns ||--o{ events : "defines pattern for"
-    events ||--o{ reminders : "triggers"
+    USERS ||--|| USER_PREFERENCES : "has"
+    USERS ||--o{ GROUPS : "creates"
+    USERS ||--o{ GROUP_MEMBERS : "joins"
+    GROUPS ||--o{ GROUP_MEMBERS : "has"
+    USERS ||--o{ EVENTS : "owns"
+    GROUPS ||--o{ EVENTS : "shares"
+    RECURRING_PATTERNS ||--o{ EVENTS : "defines"
+    EVENTS ||--o{ REMINDERS : "triggers"
 
-    users {
-        serial user_id PK
-        varchar name
-        varchar email UK
-        varchar password_hash
-        varchar instansi
+    USERS {
+        int user_id PK
+        string name
+        string email UK
+        string password_hash
+        string instansi
     }
 
-    user_preferences {
-        int user_id PK,FK
+    USER_PREFERENCES {
+        int user_id PK
         int default_reminder_minutes
-        varchar theme
+        string theme
     }
 
-    groups {
-        serial group_id PK
-        varchar group_name
+    GROUPS {
+        int group_id PK
+        string group_name
         int created_by FK
     }
 
-    group_members {
-        int group_id PK,FK
-        int user_id PK,FK
+    GROUP_MEMBERS {
+        int group_id FK
+        int user_id FK
         timestamp joined_at
     }
 
-    recurring_patterns {
-        serial pattern_id PK
-        varchar frequency
+    RECURRING_PATTERNS {
+        int pattern_id PK
+        string frequency
         date end_date
     }
 
-    events {
-        serial event_id PK
+    EVENTS {
+        int event_id PK
         int user_id FK
         int group_id FK
         int pattern_id FK
-        varchar title
-        text description
+        string title
+        string description
         timestamp start_time
         timestamp end_time
         boolean is_skipped
     }
 
-    reminders {
-        serial reminder_id PK
+    REMINDERS {
+        int reminder_id PK
         int event_id FK
         timestamp remind_at
         boolean is_sent
-        varchar notification_type
+        string notification_type
     }
 ```
 
@@ -725,35 +725,3 @@ erDiagram
    - Untuk tes deployment Vercel: `base_url` = `https://simaju-backend.vercel.app`
 4. Jalankan setiap request pada koleksi untuk mengambil tangkapan layar (screenshot) sebagai bukti pengujian tugas.
 
----
-
-## 6. Panduan Deployment ke Vercel
-
-1. **Buat Repository di GitHub**:
-   - Inisialisasi git di folder `simaju-backend`:
-     ```bash
-     cd /home/ciel/Documents/simaju-backend
-     git init
-     git add .
-     git commit -m "feat: initial commit SIMAJU REST API"
-     git branch -M main
-     git remote add origin https://github.com/USERNAME/simaju-backend.git
-     git push -u origin main
-     ```
-2. **Buat Database PostgreSQL di Neon.tech**:
-   - Buka [neon.tech](https://neon.tech), buat project baru (Region: Singapore).
-   - Salin connection string PostgreSQL.
-3. **Deploy di Vercel**:
-   - Buka [vercel.com](https://vercel.com) dan login dengan akun GitHub.
-   - Klik **Add New Project**, pilih repository `simaju-backend`.
-   - Di bagian **Environment Variables**, tambahkan:
-     - Name: `DATABASE_URL`
-     - Value: *(Connection string dari Neon.tech)*
-   - Klik **Deploy**.
-4. **Jalankan Inisialisasi Database**:
-   - Dari terminal lokal (dengan file `.env` yang sudah diisi `DATABASE_URL` Neon):
-     ```bash
-     npm run db:init
-     npm run db:seed
-     ```
-   - Selesai! Database cloud Anda kini sudah aktif dan Vercel API siap digunakan secara publik.
