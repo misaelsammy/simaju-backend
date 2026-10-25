@@ -56,8 +56,8 @@ erDiagram
     }
 
     GROUP_MEMBERS {
-        int group_id PK,FK
-        int user_id PK,FK
+        int group_id FK
+        int user_id FK
         timestamp joined_at
     }
 
@@ -73,7 +73,7 @@ erDiagram
         int group_id FK
         int pattern_id FK
         string title
-        text description
+        string description
         timestamp start_time
         timestamp end_time
         boolean is_skipped
