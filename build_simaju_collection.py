@@ -882,11 +882,7 @@ collection["item"] = [
     reminders_folder
 ]
 
-# Write to simaju_api_collection.json
-with open("/home/ciel/Documents/simaju-backend/simaju_api_collection.json", "w", encoding="utf-8") as f:
-    json.dump(collection, f, indent=2, ensure_ascii=False)
-
-# Also write to "SIMAJU API.postman_collection.json" like friend's naming convention
+# Write to "SIMAJU API.postman_collection.json"
 with open("/home/ciel/Documents/simaju-backend/SIMAJU API.postman_collection.json", "w", encoding="utf-8") as f:
     json.dump(collection, f, indent=2, ensure_ascii=False)
 

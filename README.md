@@ -745,7 +745,7 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 ## Pengujian API
 
 Seluruh endpoint telah dipetakan ke dalam format Postman Collection v2.1.0 lengkap dengan contoh request dan response:
-- File koleksi: [`SIMAJU API.postman_collection.json`](./SIMAJU%20API.postman_collection.json) atau [`simaju_api_collection.json`](./simaju_api_collection.json)
+- File koleksi: [`SIMAJU API.postman_collection.json`](./SIMAJU%20API.postman_collection.json)
 - Kompatibel langsung dengan **Postman** maupun **Thunder Client** (VS Code).
 - Dilengkapi dengan 5 folder modul (`00. Root & Health`, `01. Users & Preferences`, `02. Events & Schedules`, `03. Groups & Collaboration`, `04. Reminders & Notifications`), dokumentasi parameter, serta 47 contoh saved response (200 OK, 201 Created, 400 Bad Request, 404 Not Found).
 - Variabel bawaan `{{base_url}}` sudah otomatis mengarah ke URL produksi Vercel (`https://simaju-backend.vercel.app`).
