@@ -4,7 +4,7 @@
 
 Dibangun menggunakan arsitektur modern **Node.js**, **Express.js**, dan **PostgreSQL (Neon Serverless)**, serta siap di-deploy secara serverless ke **Vercel**.
 
-- **Deployment URL**: `https://simaju-backend.vercel.app`
+- **Deployment URL**: [`https://simaju-backend.vercel.app`](https://simaju-backend.vercel.app)
 - **Database**: PostgreSQL (Serverless via Neon / Supabase)
 - **Runtime**: Node.js v18+
 
