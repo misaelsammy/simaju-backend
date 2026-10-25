@@ -2,110 +2,557 @@
   "info": {
     "_postman_id": "b3e94a50-25e1-4c6e-82e7-f1388d019f6a",
     "name": "SIMAJU REST API",
-    "description": "Koleksi pengujian REST API untuk SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu). Dibuat untuk pengujian di Postman / Thunder Client.",
+    "description": "Koleksi endpoint REST API untuk Proyek SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu).\nMencakup modul: Root & Health, Users & Preferences, Events & Schedules, Groups & Collaboration, serta Reminders & Notifications.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "base_url",
-      "value": "http://localhost:3000",
-      "type": "string"
+      "value": "https://simaju-backend.vercel.app"
     }
   ],
   "item": [
     {
-      "name": "0. Health Check",
+      "name": "00. Root & Health",
       "item": [
         {
-          "name": "Root Health Check",
+          "name": "Root — GET /",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{base_url}}/",
-              "host": ["{{base_url}}"],
-              "path": [""]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": []
             },
-            "description": "Pemeriksaan status server dan daftar rute aktif"
-          }
+            "description": "Deskripsi: Cek endpoint root dan status serverless REST API SIMAJU.\n\nResponse Sukses (200):\n{\n  \"success\": true,\n  \"message\": \"SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu) REST API is running successfully\",\n  \"version\": \"1.0.0\",\n  \"endpoints\": {\n    \"users\": \"/api/users\",\n    \"events\": \"/api/events\",\n    \"groups\": \"/api/groups\",\n    \"reminders\": \"/api/reminders\"\n  },\n  \"timestamp\": \"2026-10-25T09:31:48.866Z\"\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": []
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu) REST API is running successfully\",\n  \"version\": \"1.0.0\",\n  \"endpoints\": {\n    \"users\": \"/api/users\",\n    \"events\": \"/api/events\",\n    \"groups\": \"/api/groups\",\n    \"reminders\": \"/api/reminders\"\n  },\n  \"timestamp\": \"2026-10-25T09:31:48.866Z\"\n}"
+            }
+          ]
         }
       ]
     },
     {
-      "name": "1. Users & Preferences",
+      "name": "01. Users & Preferences",
       "item": [
         {
-          "name": "Register User",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Alex Pratama\",\n  \"email\": \"alex.pratama@simaju.app\",\n  \"password\": \"Rahasia123!\",\n  \"instansi\": \"Divisi Teknologi Informasi\",\n  \"default_reminder_minutes\": 15,\n  \"theme\": \"dark\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/users/register",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "register"]
-            },
-            "description": "Mendaftarkan user baru dan membuat record preferensi (1-to-1)"
-          }
-        },
-        {
-          "name": "Login User",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"alex.pratama@simaju.app\",\n  \"password\": \"Rahasia123!\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/users/login",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "login"]
-            },
-            "description": "Verifikasi kredensial pengguna"
-          }
-        },
-        {
-          "name": "Get All Users",
+          "name": "List Users — GET /api/users",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/users",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
             },
-            "description": "Mengambil seluruh pengguna beserta preferensinya"
-          }
+            "description": "Deskripsi: Mengambil seluruh daftar pengguna SIMAJU beserta instansi dan preferensi default.\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil daftar pengguna\",\n  \"total\": 6,\n  \"data\": [\n    {\n      \"user_id\": 1,\n      \"name\": \"Alex Pratama, S.Kom.\",\n      \"email\": \"alex@simaju.app\",\n      \"instansi\": \"Pusat Riset Data\",\n      \"default_reminder_minutes\": 30,\n      \"theme\": \"system\"\n    }\n  ]\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/users",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil daftar pengguna\",\n  \"total\": 6,\n  \"data\": [\n    {\n      \"user_id\": 1,\n      \"name\": \"Alex Pratama, S.Kom.\",\n      \"email\": \"alex@simaju.app\",\n      \"instansi\": \"Pusat Riset Data\",\n      \"default_reminder_minutes\": 30,\n      \"theme\": \"system\"\n    },\n    {\n      \"user_id\": 2,\n      \"name\": \"Bella Safira, M.T.\",\n      \"email\": \"bella@simaju.app\",\n      \"instansi\": \"Direktorat Tata Kelola TI\",\n      \"default_reminder_minutes\": 15,\n      \"theme\": \"light\"\n    }\n  ]\n}"
+            }
+          ]
         },
         {
-          "name": "Get User Profile By ID",
+          "name": "Detail User Profile — GET /api/users/:id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/users/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "1"]
+              "raw": "{{base_url}}/api/users/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
             },
-            "description": "Mengambil profil pengguna berdasarkan user_id"
-          }
+            "description": "Deskripsi: Mengambil detail profil pengguna berdasarkan ID termasuk preferensi tema dan default waktu pengingat.\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil profil pengguna\",\n  \"data\": {\n    \"user_id\": 1,\n    \"name\": \"Alex Pratama, S.Kom.\",\n    \"email\": \"alex@simaju.app\",\n    \"instansi\": \"Pusat Riset Data\",\n    \"default_reminder_minutes\": 30,\n    \"theme\": \"system\"\n  }\n}\n\nResponse Error (404):\n{\n  \"error\": \"Pengguna dengan ID 999 tidak ditemukan\"\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/users/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil profil pengguna\",\n  \"data\": {\n    \"user_id\": 1,\n    \"name\": \"Alex Pratama, S.Kom.\",\n    \"email\": \"alex@simaju.app\",\n    \"instansi\": \"Pusat Riset Data\",\n    \"default_reminder_minutes\": 30,\n    \"theme\": \"system\"\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/users/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Pengguna dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
         },
         {
-          "name": "Update User Profile (PUT)",
+          "name": "Register User — POST /api/users/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Citra Dewi\",\n  \"email\": \"citra.dewi@simaju.app\",\n  \"password\": \"Password123!\",\n  \"instansi\": \"Biro Perencanaan dan Keuangan\",\n  \"default_reminder_minutes\": 15,\n  \"theme\": \"light\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            },
+            "description": "Deskripsi: Mendaftarkan akun pengguna baru ke dalam SIMAJU sekaligus membuat entri pengaturan preferensi pengguna.\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"name\": \"Citra Dewi\",\n  \"email\": \"citra.dewi@simaju.app\",\n  \"password\": \"Password123!\",\n  \"instansi\": \"Biro Perencanaan dan Keuangan\",\n  \"default_reminder_minutes\": 15,\n  \"theme\": \"light\"\n}\n\nResponse Sukses (201):\n{\n  \"message\": \"Registrasi pengguna berhasil\",\n  \"data\": {\n    \"user_id\": 7,\n    \"name\": \"Citra Dewi\",\n    \"email\": \"citra.dewi@simaju.app\",\n    \"instansi\": \"Biro Perencanaan dan Keuangan\"\n  }\n}\n\nResponse Error (400):\n{\n  \"error\": \"Email sudah terdaftar dalam sistem\"\n}"
+          },
+          "response": [
+            {
+              "name": "201 - Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Registrasi pengguna berhasil\",\n  \"data\": {\n    \"user_id\": 7,\n    \"name\": \"Citra Dewi\",\n    \"email\": \"citra.dewi@simaju.app\",\n    \"instansi\": \"Biro Perencanaan dan Keuangan\"\n  }\n}"
+            },
+            {
+              "name": "400 - Email Exists",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Email sudah terdaftar dalam sistem\"\n}"
+            },
+            {
+              "name": "400 - Missing Fields",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/register",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Field name, email, dan password wajib diisi\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login User — POST /api/users/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alex@simaju.app\",\n  \"password\": \"hashed_pass_alex\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            },
+            "description": "Deskripsi: Melakukan otentikasi akun pengguna dengan memverifikasi email dan password.\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"email\": \"alex@simaju.app\",\n  \"password\": \"hashed_pass_alex\"\n}\n\nResponse Sukses (200):\n{\n  \"message\": \"Login berhasil\",\n  \"data\": {\n    \"user_id\": 1,\n    \"name\": \"Alex Pratama, S.Kom.\",\n    \"email\": \"alex@simaju.app\",\n    \"instansi\": \"Pusat Riset Data\"\n  }\n}\n\nResponse Error (400):\n{\n  \"error\": \"Kredensial login tidak valid\"\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Login berhasil\",\n  \"data\": {\n    \"user_id\": 1,\n    \"name\": \"Alex Pratama, S.Kom.\",\n    \"email\": \"alex@simaju.app\",\n    \"instansi\": \"Pusat Riset Data\"\n  }\n}"
+            },
+            {
+              "name": "400 - Invalid Credentials",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Kredensial login tidak valid\"\n}"
+            },
+            {
+              "name": "404 - User Not Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Pengguna dengan email tersebut tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update User Profile — PUT /api/users/:id",
           "request": {
             "method": "PUT",
             "header": [
@@ -116,43 +563,201 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Alex Pratama, S.Kom.\",\n  \"instansi\": \"Pusat Riset Data\",\n  \"default_reminder_minutes\": 30,\n  \"theme\": \"system\"\n}"
+              "raw": "{\n  \"name\": \"Alex Pratama, M.Kom.\",\n  \"instansi\": \"Pusat Riset Data Nasional\",\n  \"default_reminder_minutes\": 45,\n  \"theme\": \"dark\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/users/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "users", "1"]
+              "raw": "{{base_url}}/api/users/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
             },
-            "description": "Memperbarui profil dan preferensi pengguna"
-          }
+            "description": "Deskripsi: Memperbarui nama, instansi, atau pengaturan preferensi tema & pengingat pengguna.\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"name\": \"Alex Pratama, M.Kom.\",\n  \"instansi\": \"Pusat Riset Data Nasional\",\n  \"default_reminder_minutes\": 45,\n  \"theme\": \"dark\"\n}\n\nResponse Sukses (200):\n{\n  \"message\": \"Profil dan preferensi pengguna berhasil diperbarui\",\n  \"data\": {\n    \"user_id\": 1,\n    \"name\": \"Alex Pratama, M.Kom.\",\n    \"email\": \"alex@simaju.app\",\n    \"instansi\": \"Pusat Riset Data Nasional\",\n    \"default_reminder_minutes\": 45,\n    \"theme\": \"dark\"\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Profil dan preferensi pengguna berhasil diperbarui\",\n  \"data\": {\n    \"user_id\": 1,\n    \"name\": \"Alex Pratama, M.Kom.\",\n    \"email\": \"alex@simaju.app\",\n    \"instansi\": \"Pusat Riset Data Nasional\",\n    \"default_reminder_minutes\": 45,\n    \"theme\": \"dark\"\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Pengguna dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
         }
       ]
     },
     {
-      "name": "2. Events (Resource Utama CRUD)",
+      "name": "02. Events & Schedules",
       "item": [
         {
-          "name": "Get All Events",
+          "name": "List Events — GET /api/events",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/events",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
             },
-            "description": "Mengambil seluruh daftar jadwal kegiatan"
-          }
+            "description": "Deskripsi: Mengambil semua daftar jadwal kegiatan (lengkap dengan data user, grup, dan pola recurring).\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil daftar jadwal kegiatan\",\n  \"total\": 8,\n  \"data\": [\n    {\n      \"event_id\": 2,\n      \"user_id\": 1,\n      \"user_name\": \"Alex Pratama, S.Kom.\",\n      \"group_id\": null,\n      \"group_name\": null,\n      \"pattern_id\": 1,\n      \"recurring_frequency\": \"weekly\",\n      \"title\": \"Evaluasi Proyek Mingguan\",\n      \"start_time\": \"2026-11-03T14:00:00.000Z\",\n      \"end_time\": \"2026-11-03T16:00:00.000Z\",\n      \"is_skipped\": false\n    }\n  ]\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil daftar jadwal kegiatan\",\n  \"total\": 8,\n  \"data\": [\n    {\n      \"event_id\": 2,\n      \"user_id\": 1,\n      \"user_name\": \"Alex Pratama, S.Kom.\",\n      \"group_id\": null,\n      \"group_name\": null,\n      \"pattern_id\": 1,\n      \"recurring_frequency\": \"weekly\",\n      \"title\": \"Evaluasi Proyek Mingguan\",\n      \"description\": \"Review sprint progres Q4 di Ruang Rapat Utama A\",\n      \"start_time\": \"2026-11-03T14:00:00.000Z\",\n      \"end_time\": \"2026-11-03T16:00:00.000Z\",\n      \"is_skipped\": false\n    }\n  ]\n}"
+            }
+          ]
         },
         {
-          "name": "Get Events by Date Range & User",
+          "name": "Filter Events by Date & User — GET /api/events",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ],
               "query": [
                 {
                   "key": "user_id",
@@ -168,18 +773,76 @@
                 }
               ]
             },
-            "description": "Filter jadwal berdasarkan rentang tanggal dan user"
-          }
+            "description": "Deskripsi: Memfilter jadwal kegiatan berdasarkan ID pengguna dan rentang tanggal.\n\nQuery Parameters:\n- `user_id`: ID pengguna (integer)\n- `start_date`: Tanggal awal (YYYY-MM-DD)\n- `end_date`: Tanggal akhir (YYYY-MM-DD)\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil daftar jadwal kegiatan\",\n  \"total\": 3,\n  \"data\": [...]\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "1"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2026-11-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2026-11-30"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil daftar jadwal kegiatan\",\n  \"total\": 3,\n  \"data\": [\n    {\n      \"event_id\": 2,\n      \"user_id\": 1,\n      \"user_name\": \"Alex Pratama, S.Kom.\",\n      \"title\": \"Evaluasi Proyek Mingguan\",\n      \"start_time\": \"2026-11-03T14:00:00.000Z\",\n      \"end_time\": \"2026-11-03T16:00:00.000Z\"\n    }\n  ]\n}"
+            }
+          ]
         },
         {
-          "name": "Check Schedule Conflict",
+          "name": "Check Schedule Conflict — GET /api/events/check-conflict",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/events/check-conflict?user_id=1&start_time=2026-11-01T09:30:00&end_time=2026-11-01T10:30:00",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events", "check-conflict"],
+              "raw": "{{base_url}}/api/events/check-conflict?user_id=1&start_time=2026-11-10T09:00:00&end_time=2026-11-10T11:00:00",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                "check-conflict"
+              ],
               "query": [
                 {
                   "key": "user_id",
@@ -187,32 +850,236 @@
                 },
                 {
                   "key": "start_time",
-                  "value": "2026-11-01T09:30:00"
+                  "value": "2026-11-10T09:00:00"
                 },
                 {
                   "key": "end_time",
-                  "value": "2026-11-01T10:30:00"
+                  "value": "2026-11-10T11:00:00"
                 }
               ]
             },
-            "description": "Mengecek apakah calon jadwal bentrok dengan jadwal yang sudah ada"
-          }
+            "description": "Deskripsi: Pengecekan overlap / bentrok jadwal untuk pengguna tertentu pada rentang waktu yang dipilih.\n\nQuery Parameters:\n- `user_id`: ID pengguna\n- `start_time`: Waktu mulai (ISO-8601)\n- `end_time`: Waktu selesai (ISO-8601)\n\nResponse Sukses (200 - Konflik Ditemukan):\n{\n  \"message\": \"Pengecekan konflik selesai\",\n  \"data\": {\n    \"has_conflict\": true,\n    \"conflict_count\": 1,\n    \"conflicts\": [\n      {\n        \"event_id\": 4,\n        \"title\": \"Presentasi Final Task Backend\",\n        \"start_time\": \"2026-11-10T10:00:00.000Z\",\n        \"end_time\": \"2026-11-10T12:00:00.000Z\"\n      }\n    ]\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "200 - Conflict Detected",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events/check-conflict?user_id=1&start_time=2026-11-10T09:00:00&end_time=2026-11-10T11:00:00",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    "check-conflict"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "1"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2026-11-10T09:00:00"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2026-11-10T11:00:00"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Pengecekan konflik selesai\",\n  \"data\": {\n    \"has_conflict\": true,\n    \"conflict_count\": 1,\n    \"conflicts\": [\n      {\n        \"event_id\": 4,\n        \"title\": \"Presentasi Final Task Backend\",\n        \"start_time\": \"2026-11-10T10:00:00.000Z\",\n        \"end_time\": \"2026-11-10T12:00:00.000Z\"\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "200 - No Conflict",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events/check-conflict?user_id=1&start_time=2026-12-01T08:00:00&end_time=2026-12-01T09:00:00",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    "check-conflict"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "1"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2026-12-01T08:00:00"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2026-12-01T09:00:00"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Pengecekan konflik selesai\",\n  \"data\": {\n    \"has_conflict\": false,\n    \"conflict_count\": 0,\n    \"conflicts\": []\n  }\n}"
+            }
+          ]
         },
         {
-          "name": "Get Event By ID",
+          "name": "Detail Event — GET /api/events/:id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/events/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events", "1"]
+              "raw": "{{base_url}}/api/events/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
             },
-            "description": "Mengambil detail satu jadwal beserta daftar reminders-nya"
-          }
+            "description": "Deskripsi: Mengambil detail lengkap jadwal kegiatan beserta daftar notifikasi pengingat (reminders) terkait.\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil detail jadwal\",\n  \"data\": {\n    \"event_id\": 2,\n    \"user_id\": 1,\n    \"user_name\": \"Alex Pratama, S.Kom.\",\n    \"title\": \"Evaluasi Proyek Mingguan\",\n    \"start_time\": \"2026-11-03T14:00:00.000Z\",\n    \"end_time\": \"2026-11-03T16:00:00.000Z\",\n    \"reminders\": [\n      {\n        \"reminder_id\": 3,\n        \"remind_at\": \"2026-11-03T13:45:00.000Z\",\n        \"notification_type\": \"email\",\n        \"is_sent\": false\n      }\n    ]\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil detail jadwal\",\n  \"data\": {\n    \"event_id\": 2,\n    \"user_id\": 1,\n    \"user_name\": \"Alex Pratama, S.Kom.\",\n    \"user_email\": \"alex@simaju.app\",\n    \"group_id\": null,\n    \"group_name\": null,\n    \"pattern_id\": 1,\n    \"recurring_frequency\": \"weekly\",\n    \"recurring_end_date\": \"2026-12-31\",\n    \"title\": \"Evaluasi Proyek Mingguan\",\n    \"description\": \"Review sprint progres Q4 di Ruang Rapat Utama A\",\n    \"start_time\": \"2026-11-03T14:00:00.000Z\",\n    \"end_time\": \"2026-11-03T16:00:00.000Z\",\n    \"is_skipped\": false,\n    \"reminders\": [\n      {\n        \"reminder_id\": 3,\n        \"remind_at\": \"2026-11-03T13:45:00.000Z\",\n        \"notification_type\": \"email\",\n        \"is_sent\": false\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Jadwal dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
         },
         {
-          "name": "Create Event (POST)",
+          "name": "Create Event — POST /api/events",
           "request": {
             "method": "POST",
             "header": [
@@ -223,18 +1090,148 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"user_id\": 1,\n  \"group_id\": 1,\n  \"title\": \"Presentasi Final Task Backend\",\n  \"description\": \"Demo endpoint Vercel dan pengujian database relational\",\n  \"start_time\": \"2026-11-10T10:00:00\",\n  \"end_time\": \"2026-11-10T12:00:00\",\n  \"allow_conflict\": false\n}"
+              "raw": "{\n  \"user_id\": 1,\n  \"title\": \"Sosialisasi Roadmap AI Nasional\",\n  \"description\": \"Pembahasan implementasi roadmap kecerdasan buatan terpadu\",\n  \"start_time\": \"2026-12-05T09:00:00\",\n  \"end_time\": \"2026-12-05T11:30:00\",\n  \"allow_conflict\": true\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/events",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
             },
-            "description": "Membuat jadwal baru dengan validasi bentrok waktu"
-          }
+            "description": "Deskripsi: Membuat jadwal kegiatan mandiri baru. Dilengkapi validasi konflik jadwal (opsional `allow_conflict: true`).\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"user_id\": 1,\n  \"title\": \"Sosialisasi Roadmap AI Nasional\",\n  \"description\": \"Pembahasan implementasi roadmap kecerdasan buatan terpadu\",\n  \"start_time\": \"2026-12-05T09:00:00\",\n  \"end_time\": \"2026-12-05T11:30:00\",\n  \"allow_conflict\": true\n}\n\nResponse Sukses (201):\n{\n  \"message\": \"Jadwal berhasil ditambahkan\",\n  \"data\": {\n    \"event_id\": 9,\n    \"user_id\": 1,\n    \"title\": \"Sosialisasi Roadmap AI Nasional\",\n    \"start_time\": \"2026-12-05T09:00:00.000Z\",\n    \"end_time\": \"2026-12-05T11:30:00.000Z\"\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "201 - Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/events",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Jadwal berhasil ditambahkan\",\n  \"data\": {\n    \"event_id\": 9,\n    \"user_id\": 1,\n    \"group_id\": null,\n    \"pattern_id\": null,\n    \"title\": \"Sosialisasi Roadmap AI Nasional\",\n    \"description\": \"Pembahasan implementasi roadmap kecerdasan buatan terpadu\",\n    \"start_time\": \"2026-12-05T09:00:00.000Z\",\n    \"end_time\": \"2026-12-05T11:30:00.000Z\",\n    \"is_skipped\": false\n  }\n}"
+            },
+            {
+              "name": "400 - Conflict Error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/events",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Jadwal bertabrakan dengan kegiatan lain yang sudah ada. Gunakan allow_conflict: true jika tetap ingin menambahkan.\",\n  \"conflicts\": [\n    {\n      \"event_id\": 4,\n      \"title\": \"Presentasi Final Task Backend\",\n      \"start_time\": \"2026-11-10T10:00:00.000Z\",\n      \"end_time\": \"2026-11-10T12:00:00.000Z\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "400 - Missing Fields",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/events",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Field user_id, title, start_time, dan end_time wajib diisi\"\n}"
+            }
+          ]
         },
         {
-          "name": "Create Recurring Event (POST)",
+          "name": "Create Recurring Event — POST /api/events",
           "request": {
             "method": "POST",
             "header": [
@@ -245,18 +1242,66 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"user_id\": 1,\n  \"title\": \"Asistensi Praktikum Mingguan\",\n  \"description\": \"Konsultasi berkala setiap Senin pagi\",\n  \"start_time\": \"2026-11-16T08:00:00\",\n  \"end_time\": \"2026-11-16T10:00:00\",\n  \"recurring\": {\n    \"frequency\": \"weekly\",\n    \"end_date\": \"2026-12-31\"\n  }\n}"
+              "raw": "{\n  \"user_id\": 1,\n  \"title\": \"Rapat Koordinasi Rutin Divisi IT\",\n  \"description\": \"Sinkronisasi sprint mingguan\",\n  \"start_time\": \"2026-12-01T13:00:00\",\n  \"end_time\": \"2026-12-01T14:30:00\",\n  \"frequency\": \"weekly\",\n  \"end_date\": \"2026-12-31\",\n  \"allow_conflict\": true\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/events",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ]
             },
-            "description": "Membuat jadwal yang berulang dengan menyertakan objek recurring"
-          }
+            "description": "Deskripsi: Membuat jadwal kegiatan berulang (recurring event) dengan pola frekuensi (`daily`, `weekly`, `monthly`) dan tanggal berakhir pola.\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"user_id\": 1,\n  \"title\": \"Rapat Koordinasi Rutin Divisi IT\",\n  \"description\": \"Sinkronisasi sprint mingguan\",\n  \"start_time\": \"2026-12-01T13:00:00\",\n  \"end_time\": \"2026-12-01T14:30:00\",\n  \"frequency\": \"weekly\",\n  \"end_date\": \"2026-12-31\",\n  \"allow_conflict\": true\n}\n\nResponse Sukses (201):\n{\n  \"message\": \"Jadwal berhasil ditambahkan\",\n  \"data\": {\n    \"event_id\": 10,\n    \"pattern_id\": 2,\n    \"title\": \"Rapat Koordinasi Rutin Divisi IT\"\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "201 - Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/events",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Jadwal berhasil ditambahkan\",\n  \"data\": {\n    \"event_id\": 10,\n    \"user_id\": 1,\n    \"group_id\": null,\n    \"pattern_id\": 2,\n    \"title\": \"Rapat Koordinasi Rutin Divisi IT\",\n    \"description\": \"Sinkronisasi sprint mingguan\",\n    \"start_time\": \"2026-12-01T13:00:00.000Z\",\n    \"end_time\": \"2026-12-01T14:30:00.000Z\",\n    \"is_skipped\": false\n  }\n}"
+            }
+          ]
         },
         {
-          "name": "Update Event (PUT)",
+          "name": "Update Event — PUT /api/events/:id",
           "request": {
             "method": "PUT",
             "header": [
@@ -267,169 +1312,415 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Presentasi Final Task Backend (Revisi Ruangan)\",\n  \"description\": \"Dipindah ke Ruang Sidang Utama Lantai 3\",\n  \"start_time\": \"2026-11-10T10:30:00\",\n  \"end_time\": \"2026-11-10T12:30:00\"\n}"
+              "raw": "{\n  \"title\": \"Evaluasi Proyek Mingguan (Update Ruangan)\",\n  \"description\": \"Review sprint progres Q4 di Ruang Rapat Utama B\",\n  \"start_time\": \"2026-11-10T10:00:00\",\n  \"end_time\": \"2026-11-10T12:00:00\",\n  \"is_skipped\": false\n}"
             },
             "url": {
-              "raw": "{{base_url}}/api/events/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events", "1"]
-            },
-            "description": "Mengubah data jadwal yang sudah ada"
-          }
-        },
-        {
-          "name": "Delete Event (DELETE)",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/events/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "events", "1"]
-            },
-            "description": "Menghapus jadwal kegiatan"
-          }
-        }
-      ]
-    },
-    {
-      "name": "3. Groups & Collaboration",
-      "item": [
-        {
-          "name": "Get All Groups",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/groups",
-              "host": ["{{base_url}}"],
-              "path": ["api", "groups"]
-            },
-            "description": "Mengambil seluruh daftar grup kolaborasi"
-          }
-        },
-        {
-          "name": "Get Group By ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/groups/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "groups", "1"]
-            },
-            "description": "Mengambil rincian grup beserta seluruh anggotanya"
-          }
-        },
-        {
-          "name": "Create Group (POST)",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"group_name\": \"Grup Studi Cloud & DevOps\",\n  \"created_by\": 1\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/groups",
-              "host": ["{{base_url}}"],
-              "path": ["api", "groups"]
-            },
-            "description": "Membuat grup kolaborasi baru"
-          }
-        },
-        {
-          "name": "Add Member to Group (POST)",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"user_id\": 2\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/groups/1/members",
-              "host": ["{{base_url}}"],
-              "path": ["api", "groups", "1", "members"]
-            },
-            "description": "Menambahkan anggota baru ke grup (relasi pivot group_members)"
-          }
-        },
-        {
-          "name": "Get Group Shared Events",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/groups/1/events",
-              "host": ["{{base_url}}"],
-              "path": ["api", "groups", "1", "events"]
-            },
-            "description": "Mengambil semua jadwal yang dibagikan ke suatu grup"
-          }
-        },
-        {
-          "name": "Remove Member from Group (DELETE)",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/groups/1/members/2",
-              "host": ["{{base_url}}"],
-              "path": ["api", "groups", "1", "members", "2"]
-            },
-            "description": "Mengeluarkan anggota dari grup"
-          }
-        }
-      ]
-    },
-    {
-      "name": "4. Reminders & Notifications",
-      "item": [
-        {
-          "name": "Get All Reminders",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/reminders",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reminders"]
-            },
-            "description": "Mengambil seluruh daftar pengingat jadwal"
-          }
-        },
-        {
-          "name": "Get Upcoming Reminders",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/reminders?upcoming=true",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reminders"],
-              "query": [
+              "raw": "{{base_url}}/api/events/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                ":id"
+              ],
+              "variable": [
                 {
-                  "key": "upcoming",
-                  "value": "true"
+                  "key": "id",
+                  "value": "2"
                 }
               ]
             },
-            "description": "Mengambil pengingat yang akan jatuh tempo dan belum terkirim"
-          }
+            "description": "Deskripsi: Memperbarui data judul, deskripsi, waktu mulai/selesai, atau status skip jadwal.\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"title\": \"Evaluasi Proyek Mingguan (Update Ruangan)\",\n  \"description\": \"Review sprint progres Q4 di Ruang Rapat Utama B\",\n  \"start_time\": \"2026-11-10T10:00:00\",\n  \"end_time\": \"2026-11-10T12:00:00\",\n  \"is_skipped\": false\n}\n\nResponse Sukses (200):\n{\n  \"message\": \"Jadwal berhasil diperbarui\",\n  \"data\": {\n    \"event_id\": 2,\n    \"title\": \"Evaluasi Proyek Mingguan (Update Ruangan)\"\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/events/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Jadwal berhasil diperbarui\",\n  \"data\": {\n    \"event_id\": 2,\n    \"user_id\": 1,\n    \"title\": \"Evaluasi Proyek Mingguan (Update Ruangan)\",\n    \"description\": \"Review sprint progres Q4 di Ruang Rapat Utama B\",\n    \"start_time\": \"2026-11-10T10:00:00.000Z\",\n    \"end_time\": \"2026-11-10T12:00:00.000Z\",\n    \"is_skipped\": false\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/events/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Jadwal dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
         },
         {
-          "name": "Create Reminder (POST)",
+          "name": "Delete Event — DELETE /api/events/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "events",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "999"
+                }
+              ]
+            },
+            "description": "Deskripsi: Menghapus jadwal kegiatan dari sistem (beserta pengingat cascading terkait).\n\nResponse Sukses (200):\n{\n  \"message\": \"Jadwal dengan ID 9 berhasil dihapus\",\n  \"deleted_event\": {\n    \"event_id\": 9,\n    \"title\": \"Sosialisasi Roadmap AI Nasional\"\n  }\n}\n\nResponse Error (404):\n{\n  \"error\": \"Jadwal dengan ID 999 tidak ditemukan\"\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "9"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Jadwal dengan ID 9 berhasil dihapus\",\n  \"deleted_event\": {\n    \"event_id\": 9,\n    \"title\": \"Sosialisasi Roadmap AI Nasional\"\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/events/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "events",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Jadwal dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03. Groups & Collaboration",
+      "item": [
+        {
+          "name": "List Groups — GET /api/groups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "groups"
+              ]
+            },
+            "description": "Deskripsi: Mengambil seluruh daftar grup kolaborasi kerja beserta informasi creator dan jumlah anggota.\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil daftar grup\",\n  \"total\": 7,\n  \"data\": [\n    {\n      \"group_id\": 1,\n      \"group_name\": \"Tim Pengembang SIMAJU\",\n      \"created_by\": 1,\n      \"creator_name\": \"Alex Pratama, S.Kom.\",\n      \"total_members\": 2\n    }\n  ]\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/groups",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil daftar grup\",\n  \"total\": 7,\n  \"data\": [\n    {\n      \"group_id\": 1,\n      \"group_name\": \"Tim Pengembang SIMAJU\",\n      \"created_by\": 1,\n      \"creator_name\": \"Alex Pratama, S.Kom.\",\n      \"total_members\": 2\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Detail Group — GET /api/groups/:id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Deskripsi: Mengambil detail grup beserta daftar lengkap anggota di dalam grup tersebut.\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil detail grup\",\n  \"data\": {\n    \"group_id\": 1,\n    \"group_name\": \"Tim Pengembang SIMAJU\",\n    \"created_by\": 1,\n    \"creator_name\": \"Alex Pratama, S.Kom.\",\n    \"members\": [\n      {\n        \"user_id\": 1,\n        \"name\": \"Alex Pratama, S.Kom.\",\n        \"email\": \"alex@simaju.app\",\n        \"instansi\": \"Pusat Riset Data\"\n      }\n    ]\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil detail grup\",\n  \"data\": {\n    \"group_id\": 1,\n    \"group_name\": \"Tim Pengembang SIMAJU\",\n    \"created_by\": 1,\n    \"creator_name\": \"Alex Pratama, S.Kom.\",\n    \"members\": [\n      {\n        \"user_id\": 1,\n        \"name\": \"Alex Pratama, S.Kom.\",\n        \"email\": \"alex@simaju.app\",\n        \"instansi\": \"Pusat Riset Data\"\n      },\n      {\n        \"user_id\": 2,\n        \"name\": \"Bella Safira, M.T.\",\n        \"email\": \"bella@simaju.app\",\n        \"instansi\": \"Direktorat Tata Kelola TI\"\n      }\n    ]\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Grup dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Group — POST /api/groups",
           "request": {
             "method": "POST",
             "header": [
@@ -440,41 +1731,1055 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"event_id\": 1,\n  \"remind_at\": \"2026-11-10T09:45:00\",\n  \"notification_type\": \"push_notification\"\n}"
+              "raw": "{\n  \"group_name\": \"Komite Transformasi Digital\",\n  \"description\": \"Kelompok kerja akselerasi digitalisasi instansi\",\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "groups"
+              ]
+            },
+            "description": "Deskripsi: Membuat grup kerja baru dan secara otomatis mendaftarkan pembuatnya sebagai anggota pertama.\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"group_name\": \"Komite Transformasi Digital\",\n  \"description\": \"Kelompok kerja akselerasi digitalisasi instansi\",\n  \"created_by\": 1\n}\n\nResponse Sukses (201):\n{\n  \"message\": \"Grup berhasil dibuat\",\n  \"data\": {\n    \"group_id\": 8,\n    \"group_name\": \"Komite Transformasi Digital\",\n    \"created_by\": 1\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "201 - Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/groups",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Grup berhasil dibuat\",\n  \"data\": {\n    \"group_id\": 8,\n    \"group_name\": \"Komite Transformasi Digital\",\n    \"description\": \"Kelompok kerja akselerasi digitalisasi instansi\",\n    \"created_by\": 1\n  }\n}"
+            },
+            {
+              "name": "400 - Missing Fields",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/groups",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Field group_name dan created_by wajib diisi\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Add Group Member — POST /api/groups/:id/members",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/:id/members",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":id",
+                "members"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Deskripsi: Menambahkan pengguna ke dalam grup kolaborasi kerja.\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"user_id\": 3\n}\n\nResponse Sukses (201):\n{\n  \"message\": \"Pengguna berhasil ditambahkan ke grup\",\n  \"data\": {\n    \"group_id\": 1,\n    \"user_id\": 3\n  }\n}\n\nResponse Error (400):\n{\n  \"error\": \"Pengguna sudah menjadi anggota grup ini\"\n}"
+          },
+          "response": [
+            {
+              "name": "201 - Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id/members",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id",
+                    "members"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Pengguna berhasil ditambahkan ke grup\",\n  \"data\": {\n    \"group_id\": 1,\n    \"user_id\": 3\n  }\n}"
+            },
+            {
+              "name": "400 - Already Member",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id/members",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id",
+                    "members"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Pengguna sudah menjadi anggota grup ini\"\n}"
+            },
+            {
+              "name": "404 - Group Not Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id/members",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id",
+                    "members"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Grup dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Group Shared Events — GET /api/groups/:id/events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/:id/events",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":id",
+                "events"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Deskripsi: Mengambil semua jadwal kegiatan bersama yang diasosiasikan dengan grup tertentu.\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil daftar jadwal untuk grup Tim Pengembang SIMAJU\",\n  \"total\": 1,\n  \"data\": [\n    {\n      \"event_id\": 4,\n      \"title\": \"Presentasi Final Task Backend\",\n      \"start_time\": \"2026-11-10T10:00:00.000Z\",\n      \"end_time\": \"2026-11-10T12:00:00.000Z\"\n    }\n  ]\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id/events",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id",
+                    "events"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil daftar jadwal untuk grup Tim Pengembang SIMAJU\",\n  \"total\": 1,\n  \"data\": [\n    {\n      \"event_id\": 4,\n      \"title\": \"Presentasi Final Task Backend\",\n      \"description\": \"Demo endpoint Vercel dan pengujian database relational\",\n      \"start_time\": \"2026-11-10T10:00:00.000Z\",\n      \"end_time\": \"2026-11-10T12:00:00.000Z\",\n      \"is_skipped\": false,\n      \"organizer_name\": \"Alex Pratama, S.Kom.\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id/events",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id",
+                    "events"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Grup dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Remove Group Member — DELETE /api/groups/:id/members/:userId",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/:id/members/:userId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":id",
+                "members",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                },
+                {
+                  "key": "userId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Deskripsi: Mengeluarkan anggota tertentu dari grup kolaborasi.\n\nResponse Sukses (200):\n{\n  \"message\": \"Pengguna dengan ID 3 berhasil dikeluarkan dari grup 1\"\n}\n\nResponse Error (404):\n{\n  \"error\": \"Anggota tidak ditemukan di grup tersebut\"\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id/members/:userId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id",
+                    "members",
+                    ":userId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Pengguna dengan ID 3 berhasil dikeluarkan dari grup 1\"\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/groups/:id/members/:userId",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "groups",
+                    ":id",
+                    "members",
+                    ":userId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Anggota tidak ditemukan di grup tersebut\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04. Reminders & Notifications",
+      "item": [
+        {
+          "name": "List Reminders — GET /api/reminders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reminders"
+              ]
+            },
+            "description": "Deskripsi: Mengambil seluruh daftar pengingat jadwal kegiatan beserta judul kegiatan dan nama pemiliknya.\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil daftar pengingat\",\n  \"total\": 2,\n  \"data\": [\n    {\n      \"reminder_id\": 3,\n      \"event_id\": 2,\n      \"event_title\": \"Evaluasi Proyek Mingguan\",\n      \"remind_at\": \"2026-11-03T13:45:00.000Z\",\n      \"notification_type\": \"email\",\n      \"is_sent\": false\n    }\n  ]\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil daftar pengingat\",\n  \"total\": 2,\n  \"data\": [\n    {\n      \"reminder_id\": 3,\n      \"event_id\": 2,\n      \"event_title\": \"Evaluasi Proyek Mingguan\",\n      \"event_start_time\": \"2026-11-03T14:00:00.000Z\",\n      \"remind_at\": \"2026-11-03T13:45:00.000Z\",\n      \"notification_type\": \"email\",\n      \"is_sent\": false,\n      \"user_name\": \"Alex Pratama, S.Kom.\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Upcoming Reminders — GET /api/reminders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders?is_sent=false",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reminders"
+              ],
+              "query": [
+                {
+                  "key": "is_sent",
+                  "value": "false"
+                }
+              ]
+            },
+            "description": "Deskripsi: Memfilter notifikasi pengingat yang belum terkirim (`is_sent = false`).\n\nQuery Parameters:\n- `is_sent`: Status pengiriman pengingat (boolean: true / false)\n\nResponse Sukses (200):\n{\n  \"message\": \"Berhasil mengambil daftar pengingat\",\n  \"total\": 2,\n  \"data\": [...]\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders?is_sent=false",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_sent",
+                      "value": "false"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Berhasil mengambil daftar pengingat\",\n  \"total\": 2,\n  \"data\": [\n    {\n      \"reminder_id\": 3,\n      \"event_id\": 2,\n      \"event_title\": \"Evaluasi Proyek Mingguan\",\n      \"remind_at\": \"2026-11-03T13:45:00.000Z\",\n      \"notification_type\": \"email\",\n      \"is_sent\": false\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Reminder — POST /api/reminders",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": 2,\n  \"remind_at\": \"2026-11-10T09:45:00\",\n  \"notification_type\": \"push_notification\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/reminders",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reminders"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reminders"
+              ]
             },
-            "description": "Menambahkan pengingat untuk sebuah jadwal"
-          }
+            "description": "Deskripsi: Menambahkan pengingat baru untuk suatu jadwal kegiatan (tipe: `email`, `push_notification`, `sms`).\n\nHeaders: Content-Type: application/json\n\nRequest Body:\n{\n  \"event_id\": 2,\n  \"remind_at\": \"2026-11-10T09:45:00\",\n  \"notification_type\": \"push_notification\"\n}\n\nResponse Sukses (201):\n{\n  \"message\": \"Pengingat berhasil dibuat\",\n  \"data\": {\n    \"reminder_id\": 4,\n    \"event_id\": 2,\n    \"remind_at\": \"2026-11-10T09:45:00.000Z\",\n    \"notification_type\": \"push_notification\",\n    \"is_sent\": false\n  }\n}"
+          },
+          "response": [
+            {
+              "name": "201 - Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Pengingat berhasil dibuat\",\n  \"data\": {\n    \"reminder_id\": 4,\n    \"event_id\": 2,\n    \"remind_at\": \"2026-11-10T09:45:00.000Z\",\n    \"notification_type\": \"push_notification\",\n    \"is_sent\": false\n  }\n}"
+            },
+            {
+              "name": "400 - Missing Fields",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Field event_id dan remind_at wajib diisi\"\n}"
+            },
+            {
+              "name": "404 - Event Not Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Jadwal dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
         },
         {
-          "name": "Mark Reminder As Sent (PATCH)",
+          "name": "Mark Reminder As Sent — PATCH /api/reminders/:id/sent",
           "request": {
             "method": "PATCH",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/reminders/1/sent",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reminders", "1", "sent"]
+              "raw": "{{base_url}}/api/reminders/:id/sent",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reminders",
+                ":id",
+                "sent"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3"
+                }
+              ]
             },
-            "description": "Menandai pengingat sudah terkirim (is_sent = true)"
-          }
+            "description": "Deskripsi: Menandai status pengingat telah terkirim (`is_sent = true`).\n\nResponse Sukses (200):\n{\n  \"message\": \"Pengingat berhasil ditandai sudah terkirim\",\n  \"data\": {\n    \"reminder_id\": 3,\n    \"is_sent\": true\n  }\n}\n\nResponse Error (404):\n{\n  \"error\": \"Pengingat dengan ID 999 tidak ditemukan\"\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders/:id/sent",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders",
+                    ":id",
+                    "sent"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Pengingat berhasil ditandai sudah terkirim\",\n  \"data\": {\n    \"reminder_id\": 3,\n    \"event_id\": 2,\n    \"remind_at\": \"2026-11-03T13:45:00.000Z\",\n    \"notification_type\": \"email\",\n    \"is_sent\": true\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders/:id/sent",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders",
+                    ":id",
+                    "sent"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Pengingat dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
         },
         {
-          "name": "Delete Reminder (DELETE)",
+          "name": "Delete Reminder — DELETE /api/reminders/:id",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/reminders/1",
-              "host": ["{{base_url}}"],
-              "path": ["api", "reminders", "1"]
+              "raw": "{{base_url}}/api/reminders/:id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reminders",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "999"
+                }
+              ]
             },
-            "description": "Menghapus pengingat"
-          }
+            "description": "Deskripsi: Menghapus data pengingat dari database.\n\nResponse Sukses (200):\n{\n  \"message\": \"Pengingat dengan ID 4 berhasil dihapus\",\n  \"deleted_reminder\": {\n    \"reminder_id\": 4,\n    \"event_id\": 2\n  }\n}\n\nResponse Error (404):\n{\n  \"error\": \"Pengingat dengan ID 999 tidak ditemukan\"\n}"
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "4"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Pengingat dengan ID 4 berhasil dihapus\",\n  \"deleted_reminder\": {\n    \"reminder_id\": 4,\n    \"event_id\": 2\n  }\n}"
+            },
+            {
+              "name": "404 - Not Found",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/reminders/:id",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "reminders",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "999"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "server",
+                  "value": "Vercel"
+                },
+                {
+                  "key": "cache-control",
+                  "value": "public, max-age=0, must-revalidate"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Pengingat dengan ID 999 tidak ditemukan\"\n}"
+            }
+          ]
         }
       ]
     }
