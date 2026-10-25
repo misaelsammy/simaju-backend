@@ -1,0 +1,482 @@
+{
+  "info": {
+    "_postman_id": "b3e94a50-25e1-4c6e-82e7-f1388d019f6a",
+    "name": "SIMAJU REST API - Learning Labs Backend",
+    "description": "Koleksi pengujian REST API untuk SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu). Dibuat untuk pengujian di Postman / Thunder Client.\n\nAuthor: Misael Sammy Gideon (21114012610084)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check",
+      "item": [
+        {
+          "name": "Root Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Pemeriksaan status server dan daftar rute aktif"
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Users & Preferences",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Misael Sammy Gideon\",\n  \"email\": \"misael.sammy@simaju.ac.id\",\n  \"password\": \"Rahasia123!\",\n  \"instansi\": \"Universitas Dian Nuswantoro\",\n  \"default_reminder_minutes\": 15,\n  \"theme\": \"dark\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "register"]
+            },
+            "description": "Mendaftarkan user baru dan membuat record preferensi (1-to-1)"
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"misael.sammy@simaju.ac.id\",\n  \"password\": \"Rahasia123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Verifikasi kredensial pengguna"
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            },
+            "description": "Mengambil seluruh pengguna beserta preferensinya"
+          }
+        },
+        {
+          "name": "Get User Profile By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            },
+            "description": "Mengambil profil pengguna berdasarkan user_id"
+          }
+        },
+        {
+          "name": "Update User Profile (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Misael Sammy Gideon, S.Kom.\",\n  \"instansi\": \"Pusat Riset Teknologi\",\n  \"default_reminder_minutes\": 30,\n  \"theme\": \"system\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            },
+            "description": "Memperbarui profil dan preferensi pengguna"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Events (Resource Utama CRUD)",
+      "item": [
+        {
+          "name": "Get All Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Mengambil seluruh daftar jadwal kegiatan"
+          }
+        },
+        {
+          "name": "Get Events by Date Range & User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                },
+                {
+                  "key": "start_date",
+                  "value": "2026-11-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2026-11-30"
+                }
+              ]
+            },
+            "description": "Filter jadwal berdasarkan rentang tanggal dan user"
+          }
+        },
+        {
+          "name": "Check Schedule Conflict",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/check-conflict?user_id=1&start_time=2026-11-01T09:30:00&end_time=2026-11-01T10:30:00",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "check-conflict"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                },
+                {
+                  "key": "start_time",
+                  "value": "2026-11-01T09:30:00"
+                },
+                {
+                  "key": "end_time",
+                  "value": "2026-11-01T10:30:00"
+                }
+              ]
+            },
+            "description": "Mengecek apakah calon jadwal bentrok dengan jadwal yang sudah ada"
+          }
+        },
+        {
+          "name": "Get Event By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1"]
+            },
+            "description": "Mengambil detail satu jadwal beserta daftar reminders-nya"
+          }
+        },
+        {
+          "name": "Create Event (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"group_id\": 1,\n  \"title\": \"Presentasi Final Task Backend\",\n  \"description\": \"Demo endpoint Vercel dan pengujian database relational\",\n  \"start_time\": \"2026-11-10T10:00:00\",\n  \"end_time\": \"2026-11-10T12:00:00\",\n  \"allow_conflict\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Membuat jadwal baru dengan validasi bentrok waktu"
+          }
+        },
+        {
+          "name": "Create Recurring Event (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"title\": \"Asistensi Praktikum Mingguan\",\n  \"description\": \"Konsultasi berkala setiap Senin pagi\",\n  \"start_time\": \"2026-11-16T08:00:00\",\n  \"end_time\": \"2026-11-16T10:00:00\",\n  \"recurring\": {\n    \"frequency\": \"weekly\",\n    \"end_date\": \"2026-12-31\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Membuat jadwal yang berulang dengan menyertakan objek recurring"
+          }
+        },
+        {
+          "name": "Update Event (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Presentasi Final Task Backend (Revisi Ruangan)\",\n  \"description\": \"Dipindah ke Ruang Sidang Utama Lantai 3\",\n  \"start_time\": \"2026-11-10T10:30:00\",\n  \"end_time\": \"2026-11-10T12:30:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1"]
+            },
+            "description": "Mengubah data jadwal yang sudah ada"
+          }
+        },
+        {
+          "name": "Delete Event (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1"]
+            },
+            "description": "Menghapus jadwal kegiatan"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Groups & Collaboration",
+      "item": [
+        {
+          "name": "Get All Groups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups"]
+            },
+            "description": "Mengambil seluruh daftar grup kolaborasi"
+          }
+        },
+        {
+          "name": "Get Group By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1"]
+            },
+            "description": "Mengambil rincian grup beserta seluruh anggotanya"
+          }
+        },
+        {
+          "name": "Create Group (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"group_name\": \"Grup Studi Cloud & DevOps\",\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups"]
+            },
+            "description": "Membuat grup kolaborasi baru"
+          }
+        },
+        {
+          "name": "Add Member to Group (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/1/members",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1", "members"]
+            },
+            "description": "Menambahkan anggota baru ke grup (relasi pivot group_members)"
+          }
+        },
+        {
+          "name": "Get Group Shared Events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/1/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1", "events"]
+            },
+            "description": "Mengambil semua jadwal yang dibagikan ke suatu grup"
+          }
+        },
+        {
+          "name": "Remove Member from Group (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/1/members/2",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1", "members", "2"]
+            },
+            "description": "Mengeluarkan anggota dari grup"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Reminders & Notifications",
+      "item": [
+        {
+          "name": "Get All Reminders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders"]
+            },
+            "description": "Mengambil seluruh daftar pengingat jadwal"
+          }
+        },
+        {
+          "name": "Get Upcoming Reminders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders?upcoming=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders"],
+              "query": [
+                {
+                  "key": "upcoming",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Mengambil pengingat yang akan jatuh tempo dan belum terkirim"
+          }
+        },
+        {
+          "name": "Create Reminder (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": 1,\n  \"remind_at\": \"2026-11-10T09:45:00\",\n  \"notification_type\": \"push_notification\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reminders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders"]
+            },
+            "description": "Menambahkan pengingat untuk sebuah jadwal"
+          }
+        },
+        {
+          "name": "Mark Reminder As Sent (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders/1/sent",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders", "1", "sent"]
+            },
+            "description": "Menandai pengingat sudah terkirim (is_sent = true)"
+          }
+        },
+        {
+          "name": "Delete Reminder (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders", "1"]
+            },
+            "description": "Menghapus pengingat"
+          }
+        }
+      ]
+    }
+  ]
+}

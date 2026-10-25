@@ -1,0 +1,58 @@
+// SIMAJU Database Schema (dbdiagram.io / DBML)
+// Author: Misael Sammy Gideon (21114012610084)
+
+Table users {
+  user_id serial [pk, increment]
+  name varchar(150) [not null]
+  email varchar(150) [unique, not null]
+  password_hash varchar(255) [not null]
+  instansi varchar(150)
+}
+
+Table user_preferences {
+  user_id int [pk, ref: - users.user_id]
+  default_reminder_minutes int [default: 15]
+  theme varchar(50) [default: 'light']
+}
+
+Table groups {
+  group_id serial [pk, increment]
+  group_name varchar(150) [not null]
+  created_by int [ref: > users.user_id]
+}
+
+Table group_members {
+  group_id int [ref: > groups.group_id]
+  user_id int [ref: > users.user_id]
+  joined_at timestamp [default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    (group_id, user_id) [pk]
+  }
+}
+
+Table recurring_patterns {
+  pattern_id serial [pk, increment]
+  frequency varchar(50) [not null]
+  end_date date
+}
+
+Table events {
+  event_id serial [pk, increment]
+  user_id int [ref: > users.user_id]
+  group_id int [ref: > groups.group_id]
+  pattern_id int [ref: > recurring_patterns.pattern_id]
+  title varchar(200) [not null]
+  description text
+  start_time timestamp [not null]
+  end_time timestamp [not null]
+  is_skipped boolean [default: false]
+}
+
+Table reminders {
+  reminder_id serial [pk, increment]
+  event_id int [ref: > events.event_id]
+  remind_at timestamp [not null]
+  is_sent boolean [default: false]
+  notification_type varchar(50)
+}

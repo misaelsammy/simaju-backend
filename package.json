@@ -1,0 +1,27 @@
+{
+  "name": "simaju-backend",
+  "version": "1.0.0",
+  "description": "Backend REST API for SIMAJU - Sistem Informasi Manajemen Jadwal Terpadu",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "node --watch api/index.js",
+    "db:init": "node src/scripts/init-db.js",
+    "db:seed": "node src/scripts/seed-db.js"
+  },
+  "keywords": [
+    "express",
+    "rest-api",
+    "postgresql",
+    "simaju",
+    "vercel"
+  ],
+  "author": "Misael Sammy Gideon",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  }
+}
