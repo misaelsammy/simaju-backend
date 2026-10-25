@@ -24,9 +24,14 @@ Dibangun menggunakan arsitektur modern **Node.js**, **Express.js**, dan **Postgr
 
 Basis data dirancang menggunakan relasi referensial antartabel PostgreSQL dengan integritas data dan batasan *Foreign Key*:
 
+![Diagram Relasi Basis Data (ERD)](./erd_diagram.svg)
+
+<details>
+<summary><b>Klik untuk melihat Kode Definisi Diagram Mermaid</b></summary>
+
 ```mermaid
 erDiagram
-    USERS ||--|| USER_PREFERENCES : "has"
+    USERS ||--o{ USER_PREFERENCES : "has"
     USERS ||--o{ GROUPS : "creates"
     USERS ||--o{ GROUP_MEMBERS : "joins"
     GROUPS ||--o{ GROUP_MEMBERS : "has"
@@ -87,6 +92,8 @@ erDiagram
         string notification_type
     }
 ```
+
+</details>
 
 ### Penjelasan Entitas & Relasi Tabel
 

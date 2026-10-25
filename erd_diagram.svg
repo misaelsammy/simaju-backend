@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" style="background-color: #0d1117; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1f6feb" />
+      <stop offset="100%" stop-color="#388bfd" />
+    </linearGradient>
+    <linearGradient id="mainHeaderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#238636" />
+      <stop offset="100%" stop-color="#2ea043" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="45" text-anchor="middle" fill="#58a6ff" font-size="22" font-weight="700" letter-spacing="1">SIMAJU — ENTITY RELATIONSHIP DIAGRAM (ERD)</text>
+  <text x="600" y="70" text-anchor="middle" fill="#8b949e" font-size="13">Sistem Informasi Manajemen Jadwal Terpadu (7 Relational Tables)</text>
+
+  <!-- Connector Lines -->
+  <!-- USERS to USER_PREFERENCES -->
+  <path d="M 280 200 L 360 200" stroke="#58a6ff" stroke-width="2" stroke-dasharray="4" fill="none" />
+  <!-- USERS to GROUPS -->
+  <path d="M 165 310 L 165 420" stroke="#58a6ff" stroke-width="2" fill="none" />
+  <!-- USERS to GROUP_MEMBERS -->
+  <path d="M 280 250 L 370 330" stroke="#58a6ff" stroke-width="2" fill="none" />
+  <!-- GROUPS to GROUP_MEMBERS -->
+  <path d="M 280 470 L 370 390" stroke="#58a6ff" stroke-width="2" fill="none" />
+  <!-- USERS to EVENTS -->
+  <path d="M 280 220 L 640 250" stroke="#2ea043" stroke-width="2.5" fill="none" />
+  <!-- GROUPS to EVENTS -->
+  <path d="M 280 490 L 640 380" stroke="#58a6ff" stroke-width="2" fill="none" />
+  <!-- RECURRING_PATTERNS to EVENTS -->
+  <path d="M 590 590 L 700 500" stroke="#d29922" stroke-width="2" fill="none" />
+  <!-- EVENTS to REMINDERS -->
+  <path d="M 890 320 L 960 320" stroke="#f85149" stroke-width="2.5" fill="none" />
+
+  <!-- 1. TABLE: USERS -->
+  <g filter="url(#shadow)">
+    <rect x="50" y="110" width="230" height="200" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+    <path d="M 50 118 Q 50 110 58 110 L 272 110 Q 280 110 280 118 L 280 145 L 50 145 Z" fill="url(#headerGrad)"/>
+    <text x="165" y="133" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">users</text>
+    
+    <text x="65" y="170" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">user_id</tspan></text>
+    <text x="265" y="170" text-anchor="end" fill="#7ee787" font-size="11">SERIAL [PK]</text>
+    <line x1="60" y1="180" x2="270" y2="180" stroke="#21262d" stroke-width="1"/>
+    
+    <text x="65" y="200" fill="#c9d1d9" font-size="12">name</text>
+    <text x="265" y="200" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(150)</text>
+    
+    <text x="65" y="225" fill="#c9d1d9" font-size="12">email</text>
+    <text x="265" y="225" text-anchor="end" fill="#f0883e" font-size="11">VARCHAR [UK]</text>
+    
+    <text x="65" y="250" fill="#c9d1d9" font-size="12">password_hash</text>
+    <text x="265" y="250" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(255)</text>
+    
+    <text x="65" y="275" fill="#c9d1d9" font-size="12">instansi</text>
+    <text x="265" y="275" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(150)</text>
+  </g>
+
+  <!-- 2. TABLE: USER_PREFERENCES (1-to-1) -->
+  <g filter="url(#shadow)">
+    <rect x="360" y="110" width="230" height="150" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+    <path d="M 360 118 Q 360 110 368 110 L 582 110 Q 590 110 590 118 L 590 145 L 360 145 Z" fill="#30363d"/>
+    <text x="475" y="133" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">user_preferences</text>
+    
+    <text x="375" y="170" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">user_id</tspan></text>
+    <text x="575" y="170" text-anchor="end" fill="#79c0ff" font-size="11">INT [PK, FK]</text>
+    <line x1="370" y1="180" x2="580" y2="180" stroke="#21262d" stroke-width="1"/>
+
+    <text x="375" y="200" fill="#c9d1d9" font-size="12">default_reminder</text>
+    <text x="575" y="200" text-anchor="end" fill="#8b949e" font-size="11">INT (minutes)</text>
+
+    <text x="375" y="225" fill="#c9d1d9" font-size="12">theme</text>
+    <text x="575" y="225" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(50)</text>
+  </g>
+
+  <!-- 3. TABLE: GROUPS -->
+  <g filter="url(#shadow)">
+    <rect x="50" y="420" width="230" height="150" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+    <path d="M 50 428 Q 50 420 58 420 L 272 420 Q 280 420 280 428 L 280 455 L 50 455 Z" fill="#8957e5"/>
+    <text x="165" y="443" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">groups</text>
+    
+    <text x="65" y="480" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">group_id</tspan></text>
+    <text x="265" y="480" text-anchor="end" fill="#7ee787" font-size="11">SERIAL [PK]</text>
+    <line x1="60" y1="490" x2="270" y2="490" stroke="#21262d" stroke-width="1"/>
+
+    <text x="65" y="510" fill="#c9d1d9" font-size="12">group_name</text>
+    <text x="265" y="510" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(150)</text>
+
+    <text x="65" y="535" fill="#c9d1d9" font-size="12">created_by</text>
+    <text x="265" y="535" text-anchor="end" fill="#79c0ff" font-size="11">INT [FK]</text>
+  </g>
+
+  <!-- 4. TABLE: GROUP_MEMBERS (Many-to-Many Pivot) -->
+  <g filter="url(#shadow)">
+    <rect x="360" y="310" width="230" height="150" rx="8" fill="#161b22" stroke="#8957e5" stroke-width="1.5" stroke-dasharray="3"/>
+    <path d="M 360 318 Q 360 310 368 310 L 582 310 Q 590 310 590 318 L 590 345 L 360 345 Z" fill="#6e40c9"/>
+    <text x="475" y="333" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">group_members (pivot)</text>
+    
+    <text x="375" y="370" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">group_id</tspan></text>
+    <text x="575" y="370" text-anchor="end" fill="#d2a8ff" font-size="11">INT [PK, FK]</text>
+
+    <text x="375" y="395" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">user_id</tspan></text>
+    <text x="575" y="395" text-anchor="end" fill="#d2a8ff" font-size="11">INT [PK, FK]</text>
+    <line x1="370" y1="405" x2="580" y2="405" stroke="#21262d" stroke-width="1"/>
+
+    <text x="375" y="425" fill="#c9d1d9" font-size="12">joined_at</text>
+    <text x="575" y="425" text-anchor="end" fill="#8b949e" font-size="11">TIMESTAMP</text>
+  </g>
+
+  <!-- 5. TABLE: EVENTS (Main Resource) -->
+  <g filter="url(#shadow)">
+    <rect x="640" y="160" width="250" height="340" rx="8" fill="#161b22" stroke="#2ea043" stroke-width="2"/>
+    <path d="M 640 168 Q 640 160 648 160 L 882 160 Q 890 160 890 168 L 890 195 L 640 195 Z" fill="url(#mainHeaderGrad)"/>
+    <text x="765" y="183" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">events (Resource Utama)</text>
+    
+    <text x="655" y="220" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">event_id</tspan></text>
+    <text x="875" y="220" text-anchor="end" fill="#7ee787" font-size="11">SERIAL [PK]</text>
+    <line x1="650" y1="230" x2="880" y2="230" stroke="#21262d" stroke-width="1"/>
+
+    <text x="655" y="250" fill="#c9d1d9" font-size="12">user_id</text>
+    <text x="875" y="250" text-anchor="end" fill="#79c0ff" font-size="11">INT [FK]</text>
+
+    <text x="655" y="275" fill="#c9d1d9" font-size="12">group_id</text>
+    <text x="875" y="275" text-anchor="end" fill="#79c0ff" font-size="11">INT [FK, NULL]</text>
+
+    <text x="655" y="300" fill="#c9d1d9" font-size="12">pattern_id</text>
+    <text x="875" y="300" text-anchor="end" fill="#79c0ff" font-size="11">INT [FK, NULL]</text>
+
+    <text x="655" y="325" fill="#c9d1d9" font-size="12">title</text>
+    <text x="875" y="325" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(200)</text>
+
+    <text x="655" y="350" fill="#c9d1d9" font-size="12">description</text>
+    <text x="875" y="350" text-anchor="end" fill="#8b949e" font-size="11">TEXT</text>
+
+    <text x="655" y="375" fill="#c9d1d9" font-size="12">start_time</text>
+    <text x="875" y="375" text-anchor="end" fill="#ffa657" font-size="11">TIMESTAMP</text>
+
+    <text x="655" y="400" fill="#c9d1d9" font-size="12">end_time</text>
+    <text x="875" y="400" text-anchor="end" fill="#ffa657" font-size="11">TIMESTAMP</text>
+
+    <text x="655" y="425" fill="#c9d1d9" font-size="12">is_skipped</text>
+    <text x="875" y="425" text-anchor="end" fill="#8b949e" font-size="11">BOOLEAN</text>
+  </g>
+
+  <!-- 6. TABLE: RECURRING_PATTERNS -->
+  <g filter="url(#shadow)">
+    <rect x="360" y="550" width="230" height="150" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+    <path d="M 360 558 Q 360 550 368 550 L 582 550 Q 590 550 590 558 L 590 585 L 360 585 Z" fill="#9e6a03"/>
+    <text x="475" y="573" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="700">recurring_patterns</text>
+    
+    <text x="375" y="610" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">pattern_id</tspan></text>
+    <text x="575" y="610" text-anchor="end" fill="#7ee787" font-size="11">SERIAL [PK]</text>
+    <line x1="370" y1="620" x2="580" y2="620" stroke="#21262d" stroke-width="1"/>
+
+    <text x="375" y="640" fill="#c9d1d9" font-size="12">frequency</text>
+    <text x="575" y="640" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(50)</text>
+
+    <text x="375" y="665" fill="#c9d1d9" font-size="12">end_date</text>
+    <text x="575" y="665" text-anchor="end" fill="#8b949e" font-size="11">DATE</text>
+  </g>
+
+  <!-- 7. TABLE: REMINDERS -->
+  <g filter="url(#shadow)">
+    <rect x="960" y="240" width="200" height="200" rx="8" fill="#161b22" stroke="#da3633" stroke-width="1.5"/>
+    <path d="M 960 248 Q 960 240 968 240 L 1152 240 Q 1160 240 1160 248 L 1160 275 L 960 275 Z" fill="#b62324"/>
+    <text x="1060" y="263" text-anchor="middle" fill="#ffffff" font-size="14" font-weight="700">reminders</text>
+    
+    <text x="975" y="300" fill="#e6edf3" font-size="12">🔑 <tspan font-weight="bold">reminder_id</tspan></text>
+    <text x="1145" y="300" text-anchor="end" fill="#7ee787" font-size="11">SERIAL [PK]</text>
+    <line x1="970" y1="310" x2="1150" y2="310" stroke="#21262d" stroke-width="1"/>
+
+    <text x="975" y="330" fill="#c9d1d9" font-size="12">event_id</text>
+    <text x="1145" y="330" text-anchor="end" fill="#79c0ff" font-size="11">INT [FK]</text>
+
+    <text x="975" y="355" fill="#c9d1d9" font-size="12">remind_at</text>
+    <text x="1145" y="355" text-anchor="end" fill="#ffa657" font-size="11">TIMESTAMP</text>
+
+    <text x="975" y="380" fill="#c9d1d9" font-size="12">is_sent</text>
+    <text x="1145" y="380" text-anchor="end" fill="#8b949e" font-size="11">BOOLEAN</text>
+
+    <text x="975" y="405" fill="#c9d1d9" font-size="12">notification_type</text>
+    <text x="1145" y="405" text-anchor="end" fill="#8b949e" font-size="11">VARCHAR(50)</text>
+  </g>
+
+  <!-- Legend -->
+  <rect x="50" y="730" width="1110" height="40" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="70" y="755" fill="#8b949e" font-size="12" font-weight="600">LEGEND:</text>
+  <circle cx="150" cy="750" r="5" fill="#7ee787"/>
+  <text x="165" y="755" fill="#c9d1d9" font-size="12">Primary Key (PK)</text>
+  <circle cx="290" cy="750" r="5" fill="#79c0ff"/>
+  <text x="305" y="755" fill="#c9d1d9" font-size="12">Foreign Key (FK)</text>
+  <circle cx="430" cy="750" r="5" fill="#f0883e"/>
+  <text x="445" y="755" fill="#c9d1d9" font-size="12">Unique Constraint (UK)</text>
+  <line x1="590" y1="750" x2="620" y2="750" stroke="#58a6ff" stroke-width="2" stroke-dasharray="3"/>
+  <text x="630" y="755" fill="#c9d1d9" font-size="12">One-to-One / Many-to-Many</text>
+  <line x1="810" y1="750" x2="840" y2="750" stroke="#2ea043" stroke-width="2.5"/>
+  <text x="850" y="755" fill="#c9d1d9" font-size="12">One-to-Many Direct Relation</text>
+</svg>
