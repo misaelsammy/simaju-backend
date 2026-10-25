@@ -34,10 +34,7 @@ async function registerUser(req, res, next) {
       [newUser.user_id, default_reminder_minutes || 15, theme || 'light']
     );
 
-    res.status(201).json({
-      message: 'Registrasi pengguna berhasil',
-      data: newUser
-    });
+    res.status(201).json({ user: newUser });
   } catch (err) {
     next(err);
   }
@@ -70,10 +67,7 @@ async function loginUser(req, res, next) {
 
     delete user.password_hash;
 
-    res.status(200).json({
-      message: 'Login berhasil',
-      data: user
-    });
+    res.status(200).json({ message: 'Login berhasil', user });
   } catch (err) {
     next(err);
   }
@@ -90,11 +84,7 @@ async function getAllUsers(req, res, next) {
       ORDER BY u.user_id ASC
     `);
 
-    res.status(200).json({
-      message: 'Berhasil mengambil daftar pengguna',
-      total: result.rows.length,
-      data: result.rows
-    });
+    res.status(200).json(result.rows);
   } catch (err) {
     next(err);
   }
@@ -117,10 +107,7 @@ async function getUserProfile(req, res, next) {
       return res.status(404).json({ error: `Pengguna dengan ID ${id} tidak ditemukan` });
     }
 
-    res.status(200).json({
-      message: 'Berhasil mengambil profil pengguna',
-      data: result.rows[0]
-    });
+    res.status(200).json(result.rows[0]);
   } catch (err) {
     next(err);
   }
