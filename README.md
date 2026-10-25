@@ -1,33 +1,28 @@
-# SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu) - REST API
+# SIMAJU REST API
 
-RESTful API backend untuk platform manajemen jadwal kegiatan, kolaborasi agenda grup/tim, pengulangan kegiatan rutin (*recurring events*), deteksi bentrok jadwal (*conflict detection*), serta pengingat otomatis (*reminders*). Proyek ini dibangun menggunakan **Node.js Express** dan **PostgreSQL (Neon Serverless)**, serta siap di-deploy secara serverless ke **Vercel**.
+> **Sistem Informasi Manajemen Jadwal Terpadu** — Layanan backend RESTful API untuk manajemen kalender kegiatan, agenda kolaboratif tim, perulangan acara berkala (*recurring events*), deteksi bentrok jadwal (*conflict detection*), dan pengingat otomatis (*reminders*).
 
-- **Teknologi**: Node.js, Express.js, PostgreSQL (Serverless via Neon / Supabase), Vercel  
-- **Deployment URL**: `https://simaju-backend.vercel.app` *(sesuaikan dengan URL Vercel setelah di-deploy)*  
+Dibangun menggunakan arsitektur modern **Node.js**, **Express.js**, dan **PostgreSQL (Neon Serverless)**, serta siap di-deploy secara serverless ke **Vercel**.
 
----
-
-## 1. Deskripsi Singkat Project
-
-**SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu)** adalah layanan backend REST API untuk memfasilitasi pengelolaan jadwal kegiatan, kolaborasi agenda grup/tim, pengulangan kegiatan rutin (*recurring events*), deteksi bentrok jadwal (*conflict detection*), serta pengingat otomatis (*reminders*).
-
-API ini dibangun menggunakan arsitektur serverless Express.js yang siap di-deploy ke Vercel dan terhubung ke database relasional PostgreSQL di cloud (Neon.tech / Supabase).
+- **Deployment URL**: `https://simaju-backend.vercel.app`
+- **Database**: PostgreSQL (Serverless via Neon / Supabase)
+- **Runtime**: Node.js v18+
 
 ---
 
-## 2. Skema Database & ERD (Entity Relationship Diagram)
+## Fitur Utama
 
-Database terdiri dari **7 tabel berelasi** dengan batasan Foreign Key dan integritas referensial (melampaui syarat minimal 5 tabel):
+- 📅 **Manajemen Jadwal Lengkap**: Operasi CRUD (Create, Read, Update, Delete) agenda kegiatan dengan validasi rentang waktu.
+- ⚡ **Deteksi Bentrok Jadwal (Conflict Detection)**: Algoritma validasi otomatis untuk mencegah agenda tumpang tindih pada waktu yang sama.
+- 🔁 **Perulangan Jadwal (Recurring Events)**: Konfigurasi pola perulangan (harian, mingguan, bulanan) dengan batas tanggal akhir.
+- 👥 **Kolaborasi Agenda Grup**: Pembuatan ruang kerja tim, manajemen anggota (pivot many-to-many), dan pembagian agenda bersama.
+- ⏰ **Sistem Pengingat (Reminders)**: Penjadwalan pengingat otomatis sebelum kegiatan dimulai beserta penanda status terkirim.
 
-1. **`users`**: Menyimpan identitas pengguna (nama, email unik, hash password, instansi).
-2. **`user_preferences`**: Relasi One-to-One dengan `users` untuk preferensi reminder default dan tema tampilan.
-3. **`groups`**: Menyimpan grup kolaborasi jadwal yang dibuat oleh user.
-4. **`group_members`**: Tabel pivot Many-to-Many antara `users` dan `groups`.
-5. **`recurring_patterns`**: Menyimpan pola pengulangan jadwal (frekuensi: harian, mingguan, bulanan, dan tanggal berakhir).
-6. **`events`** *(Resource Utama)*: Menyimpan seluruh jadwal kegiatan, terhubung ke `users`, `groups`, dan `recurring_patterns`.
-7. **`reminders`**: Menyimpan daftar pengingat otomatis untuk event tertentu.
+---
 
-### Diagram ERD (Mermaid)
+## Diagram Relasi Basis Data (ERD)
+
+Basis data dirancang menggunakan relasi referensial antartabel PostgreSQL dengan integritas data dan batasan *Foreign Key*:
 
 ```mermaid
 erDiagram
@@ -93,19 +88,32 @@ erDiagram
     }
 ```
 
-> **Catatan untuk dbdiagram.io / drawsql.app**:  
-> Kode skema DBML tersedia pada file [`schema.dbml`](./schema.dbml). Anda bisa langsung copy-paste isinya ke [dbdiagram.io](https://dbdiagram.io) untuk mengunduh gambar diagram resolusi tinggi.
+> **Catatan Skema**: Definisi skema basis data dalam format DBML tersedia pada file [`schema.dbml`](./schema.dbml).
 
 ---
 
-## 3. Daftar Endpoint REST API
+## Struktur Tabel
 
-### A. Health Check & Root
+1. **`users`**: Menyimpan data identitas pengguna (nama, email unik, kredensial terenkripsi, instansi).
+2. **`user_preferences`**: Relasi One-to-One dengan `users` untuk menyimpan preferensi waktu pengingat dan tema aplikasi.
+3. **`groups`**: Menyimpan daftar grup kolaborasi jadwal yang dibuat pengguna.
+4. **`group_members`**: Tabel perantara (pivot Many-to-Many) antara pengguna dan grup.
+5. **`recurring_patterns`**: Definisi pola frekuensi perulangan agenda dan tanggal berakhir.
+6. **`events`**: Entitas utama penyimpanan seluruh jadwal kegiatan personal maupun grup.
+7. **`reminders`**: Menyimpan data pengingat otomatis untuk setiap kegiatan.
 
-#### Root Status
+---
+
+## Dokumentasi Endpoint API
+
+Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untuk lingkungan lokal).
+
+### A. Health Check
+
+#### Status Layanan
 - **Method**       : `GET`
-- **URL**          : `https://simaju-backend.vercel.app/`
-- **Deskripsi**    : Memeriksa kesehatan server dan daftar tautan resource API
+- **URL**          : `/`
+- **Deskripsi**    : Memeriksa kesiapan server dan daftar endpoint aktif
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -123,28 +131,22 @@ erDiagram
     "timestamp": "2026-10-25T12:00:00.000Z"
   }
   ```
-- **Response Error (500)**:
-  ```json
-  {
-    "error": "Terjadi kesalahan internal pada server"
-  }
-  ```
 
 ---
 
-### B. Resource: Users & Preferences
+### B. Pengguna & Autentikasi (`/api/users`)
 
-#### 1. Registrasi Pengguna Baru
+#### 1. Registrasi Pengguna
 - **Method**       : `POST`
-- **URL**          : `https://simaju-backend.vercel.app/api/users/register`
-- **Deskripsi**    : Mendaftarkan akun pengguna baru dan otomatis menginisialisasi record preferensi
+- **URL**          : `/api/users/register`
+- **Deskripsi**    : Mendaftarkan akun pengguna baru sekaligus menginisialisasi record preferensi bawaan
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
     "name": "Alex Pratama",
     "email": "alex.pratama@simaju.app",
-    "password": "RahasiaPassword123!",
+    "password": "PasswordAman123!",
     "instansi": "Divisi Teknologi Informasi",
     "default_reminder_minutes": 15,
     "theme": "dark"
@@ -171,14 +173,14 @@ erDiagram
 
 #### 2. Login Pengguna
 - **Method**       : `POST`
-- **URL**          : `https://simaju-backend.vercel.app/api/users/login`
-- **Deskripsi**    : Verifikasi kredensial pengguna untuk masuk ke sistem
+- **URL**          : `/api/users/login`
+- **Deskripsi**    : Memverifikasi kredensial pengguna untuk masuk ke aplikasi
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
     "email": "alex.pratama@simaju.app",
-    "password": "RahasiaPassword123!"
+    "password": "PasswordAman123!"
   }
   ```
 - **Response Sukses (200)**:
@@ -202,8 +204,8 @@ erDiagram
 
 #### 3. Mengambil Profil Pengguna
 - **Method**       : `GET`
-- **URL**          : `https://simaju-backend.vercel.app/api/users/1`
-- **Deskripsi**    : Mengambil data profil beserta preferensi jadwal
+- **URL**          : `/api/users/:id`
+- **Deskripsi**    : Mengambil data profil dan preferensi pengguna berdasarkan ID
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -229,8 +231,8 @@ erDiagram
 
 #### 4. Memperbarui Profil Pengguna
 - **Method**       : `PUT`
-- **URL**          : `https://simaju-backend.vercel.app/api/users/1`
-- **Deskripsi**    : Memperbarui nama, instansi, atau preferensi pengguna
+- **URL**          : `/api/users/:id`
+- **Deskripsi**    : Memperbarui data pengguna dan preferensi tampilan/notifikasi
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
@@ -255,21 +257,15 @@ erDiagram
     }
   }
   ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Pengguna dengan ID 1 tidak ditemukan"
-  }
-  ```
 
 ---
 
-### C. Resource Utama: Events (CRUD Lengkap)
+### C. Manajemen Jadwal (`/api/events`)
 
-#### 1. Mengambil Seluruh Jadwal (dengan Filter Rentang Tanggal & User)
+#### 1. Mengambil Daftar Seluruh Jadwal
 - **Method**       : `GET`
-- **URL**          : `https://simaju-backend.vercel.app/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30`
-- **Deskripsi**    : Mengambil daftar kegiatan berdasarkan filter opsional
+- **URL**          : `/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30`
+- **Deskripsi**    : Mengambil daftar kegiatan kalender dengan filter rentang tanggal dan user
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -286,7 +282,7 @@ erDiagram
         "group_name": "Tim Pengembang SIMAJU",
         "pattern_id": null,
         "title": "Sprint Planning SIMAJU",
-        "description": "Rapat mingguan pembahasan backlog dan arsitektur API",
+        "description": "Rapat mingguan pembahasan backlog dan implementasi fitur",
         "start_time": "2026-11-01T09:00:00.000Z",
         "end_time": "2026-11-01T11:00:00.000Z",
         "is_skipped": false
@@ -294,17 +290,11 @@ erDiagram
     ]
   }
   ```
-- **Response Error (500)**:
-  ```json
-  {
-    "error": "Terjadi kesalahan internal pada server"
-  }
-  ```
 
 #### 2. Deteksi Bentrok Jadwal (Check Conflict)
 - **Method**       : `GET`
-- **URL**          : `https://simaju-backend.vercel.app/api/events/check-conflict?user_id=1&start_time=2026-11-01T09:30:00&end_time=2026-11-01T10:30:00`
-- **Deskripsi**    : Mengecek apakah terdapat jadwal yang tumpang-tindih untuk user tertentu
+- **URL**          : `/api/events/check-conflict?user_id=1&start_time=2026-11-01T09:30:00&end_time=2026-11-01T10:30:00`
+- **Deskripsi**    : Memeriksa apakah calon agenda bertabrakan dengan agenda lain yang sudah terdaftar
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -322,17 +312,11 @@ erDiagram
     ]
   }
   ```
-- **Response Error (400)**:
-  ```json
-  {
-    "error": "Query parameter user_id, start_time, dan end_time wajib diisi"
-  }
-  ```
 
-#### 3. Mengambil Detail Satu Jadwal
+#### 3. Mengambil Detail Jadwal
 - **Method**       : `GET`
-- **URL**          : `https://simaju-backend.vercel.app/api/events/1`
-- **Deskripsi**    : Mengambil detail jadwal beserta relasi reminder-nya
+- **URL**          : `/api/events/:id`
+- **Deskripsi**    : Mengambil detail satu kegiatan beserta daftar pengingat yang terhubung
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -348,7 +332,7 @@ erDiagram
       "group_name": "Tim Pengembang SIMAJU",
       "pattern_id": null,
       "title": "Sprint Planning SIMAJU",
-      "description": "Rapat mingguan pembahasan backlog dan arsitektur API",
+      "description": "Rapat mingguan pembahasan backlog dan implementasi fitur",
       "start_time": "2026-11-01T09:00:00.000Z",
       "end_time": "2026-11-01T11:00:00.000Z",
       "is_skipped": false,
@@ -363,25 +347,19 @@ erDiagram
     }
   }
   ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Jadwal dengan ID 1 tidak ditemukan"
-  }
-  ```
 
 #### 4. Menambahkan Jadwal Baru (POST)
 - **Method**       : `POST`
-- **URL**          : `https://simaju-backend.vercel.app/api/events`
-- **Deskripsi**    : Menambah jadwal baru dengan validasi otomatis bentrok jadwal
+- **URL**          : `/api/events`
+- **Deskripsi**    : Menambahkan agenda baru dengan pencegahan bentrok otomatis
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
     "user_id": 1,
     "group_id": 1,
-    "title": "Presentasi Final Task Backend",
-    "description": "Demo REST API dengan PostgreSQL dan Vercel",
+    "title": "Presentasi Arsitektur Sistem",
+    "description": "Paparan teknis implementasi database relasional dan API serverless",
     "start_time": "2026-11-10T10:00:00",
     "end_time": "2026-11-10T12:00:00",
     "allow_conflict": false
@@ -396,8 +374,8 @@ erDiagram
       "user_id": 1,
       "group_id": 1,
       "pattern_id": null,
-      "title": "Presentasi Final Task Backend",
-      "description": "Demo REST API dengan PostgreSQL dan Vercel",
+      "title": "Presentasi Arsitektur Sistem",
+      "description": "Paparan teknis implementasi database relasional dan API serverless",
       "start_time": "2026-11-10T10:00:00.000Z",
       "end_time": "2026-11-10T12:00:00.000Z",
       "is_skipped": false
@@ -419,18 +397,52 @@ erDiagram
   }
   ```
 
-#### 5. Mengubah Data Jadwal (PUT)
-- **Method**       : `PUT`
-- **URL**          : `https://simaju-backend.vercel.app/api/events/1`
-- **Deskripsi**    : Mengubah judul, deskripsi, waktu, atau grup jadwal
+#### 5. Menambahkan Jadwal Berulang (Recurring Event)
+- **Method**       : `POST`
+- **URL**          : `/api/events`
+- **Deskripsi**    : Membuat jadwal berkala sekaligus mengaitkannya dengan pola frekuensi
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
-    "title": "Sprint Planning SIMAJU (Diperpanjang)",
-    "description": "Pembahasan tambahan terkait skema ERD 7 tabel",
-    "start_time": "2026-11-01T09:00:00",
-    "end_time": "2026-11-01T11:30:00"
+    "user_id": 1,
+    "title": "Review Proyek Mingguan",
+    "description": "Sinkronisasi capaian tim setiap awal pekan",
+    "start_time": "2026-11-16T08:00:00",
+    "end_time": "2026-11-16T10:00:00",
+    "recurring": {
+      "frequency": "weekly",
+      "end_date": "2026-12-31"
+    }
+  }
+  ```
+- **Response Sukses (201)**:
+  ```json
+  {
+    "message": "Jadwal berhasil ditambahkan",
+    "data": {
+      "event_id": 5,
+      "user_id": 1,
+      "pattern_id": 2,
+      "title": "Review Proyek Mingguan",
+      "start_time": "2026-11-16T08:00:00.000Z",
+      "end_time": "2026-11-16T10:00:00.000Z"
+    }
+  }
+  ```
+
+#### 6. Mengubah Detail Jadwal (PUT)
+- **Method**       : `PUT`
+- **URL**          : `/api/events/:id`
+- **Deskripsi**    : Memperbarui judul, rincian, waktu, atau status agenda
+- **Headers**      : `Content-Type: application/json`
+- **Request Body** :
+  ```json
+  {
+    "title": "Presentasi Arsitektur Sistem (Sesi Lanjutan)",
+    "description": "Pembahasan tambahan terkait integrasi sistem cloud",
+    "start_time": "2026-11-10T10:30:00",
+    "end_time": "2026-11-10T12:30:00"
   }
   ```
 - **Response Sukses (200)**:
@@ -439,59 +451,44 @@ erDiagram
     "message": "Jadwal berhasil diperbarui",
     "data": {
       "event_id": 1,
-      "user_id": 1,
-      "group_id": 1,
-      "pattern_id": null,
-      "title": "Sprint Planning SIMAJU (Diperpanjang)",
-      "description": "Pembahasan tambahan terkait skema ERD 7 tabel",
-      "start_time": "2026-11-01T09:00:00.000Z",
-      "end_time": "2026-11-01T11:30:00.000Z",
+      "title": "Presentasi Arsitektur Sistem (Sesi Lanjutan)",
+      "description": "Pembahasan tambahan terkait integrasi sistem cloud",
+      "start_time": "2026-11-10T10:30:00.000Z",
+      "end_time": "2026-11-10T12:30:00.000Z",
       "is_skipped": false
     }
   }
   ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Jadwal dengan ID 1 tidak ditemukan"
-  }
-  ```
 
-#### 6. Menghapus Jadwal (DELETE)
+#### 7. Menghapus Jadwal (DELETE)
 - **Method**       : `DELETE`
-- **URL**          : `https://simaju-backend.vercel.app/api/events/1`
-- **Deskripsi**    : Menghapus kegiatan dari sistem kalender
+- **URL**          : `/api/events/:id`
+- **Deskripsi**    : Menghapus kegiatan dari kalender sistem
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
   ```json
   {
-    "message": "Jadwal 'Sprint Planning SIMAJU' berhasil dihapus",
+    "message": "Jadwal 'Presentasi Arsitektur Sistem' berhasil dihapus",
     "deleted_id": 1
-  }
-  ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Jadwal dengan ID 1 tidak ditemukan"
   }
   ```
 
 ---
 
-### D. Resource: Groups & Kolaborasi
+### D. Manajemen Grup & Kolaborasi (`/api/groups`)
 
 #### 1. Mengambil Daftar Seluruh Grup
 - **Method**       : `GET`
-- **URL**          : `https://simaju-backend.vercel.app/api/groups`
-- **Deskripsi**    : Menampilkan seluruh grup beserta jumlah anggotanya
+- **URL**          : `/api/groups`
+- **Deskripsi**    : Menampilkan seluruh grup kolaborasi beserta jumlah anggotanya
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
   ```json
   {
     "message": "Berhasil mengambil daftar grup",
-    "total": 2,
+    "total": 1,
     "data": [
       {
         "group_id": 1,
@@ -506,8 +503,8 @@ erDiagram
 
 #### 2. Membuat Grup Baru
 - **Method**       : `POST`
-- **URL**          : `https://simaju-backend.vercel.app/api/groups`
-- **Deskripsi**    : Membuat grup baru dan otomatis memasukkan pembuat sebagai anggota pertama
+- **URL**          : `/api/groups`
+- **Deskripsi**    : Membuat grup baru dan otomatis menjadikan pembuat sebagai anggota pertama
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
@@ -527,17 +524,11 @@ erDiagram
     }
   }
   ```
-- **Response Error (400)**:
-  ```json
-  {
-    "error": "Field group_name dan created_by wajib diisi"
-  }
-  ```
 
-#### 3. Menambahkan Anggota ke Grup (Pivot Many-to-Many)
+#### 3. Menambahkan Anggota ke Grup
 - **Method**       : `POST`
-- **URL**          : `https://simaju-backend.vercel.app/api/groups/1/members`
-- **Deskripsi**    : Mendaftarkan user ke dalam grup
+- **URL**          : `/api/groups/:id/members`
+- **Deskripsi**    : Memasukkan pengguna ke dalam grup (relasi pivot `group_members`)
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
@@ -555,17 +546,11 @@ erDiagram
     }
   }
   ```
-- **Response Error (400)**:
-  ```json
-  {
-    "error": "Pengguna sudah menjadi anggota grup ini"
-  }
-  ```
 
 #### 4. Mengeluarkan Anggota dari Grup (DELETE)
 - **Method**       : `DELETE`
-- **URL**          : `https://simaju-backend.vercel.app/api/groups/1/members/2`
-- **Deskripsi**    : Menghapus relasi anggota dari grup
+- **URL**          : `/api/groups/:id/members/:userId`
+- **Deskripsi**    : Menghapus keterikatan anggota dari suatu grup
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -578,21 +563,15 @@ erDiagram
     }
   }
   ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Anggota tidak ditemukan di grup tersebut"
-  }
-  ```
 
 ---
 
-### E. Resource: Reminders (Pengingat)
+### E. Manajemen Pengingat (`/api/reminders`)
 
-#### 1. Mengambil Daftar Pengingat (Upcoming)
+#### 1. Mengambil Pengingat Mendatang
 - **Method**       : `GET`
-- **URL**          : `https://simaju-backend.vercel.app/api/reminders?upcoming=true`
-- **Deskripsi**    : Mengambil pengingat yang belum terkirim dan akan jatuh tempo
+- **URL**          : `/api/reminders?upcoming=true`
+- **Deskripsi**    : Mengambil daftar pengingat yang akan jatuh tempo dan belum terkirim
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -615,10 +594,10 @@ erDiagram
   }
   ```
 
-#### 2. Menambahkan Pengingat Baru (POST)
+#### 2. Membuat Pengingat Baru (POST)
 - **Method**       : `POST`
-- **URL**          : `https://simaju-backend.vercel.app/api/reminders`
-- **Deskripsi**    : Membuat pengingat untuk jadwal tertentu
+- **URL**          : `/api/reminders`
+- **Deskripsi**    : Mendaftarkan jadwal notifikasi pengingat untuk kegiatan tertentu
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
@@ -641,17 +620,11 @@ erDiagram
     }
   }
   ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Jadwal dengan ID 1 tidak ditemukan"
-  }
-  ```
 
 #### 3. Menandai Pengingat Terkirim (PATCH)
 - **Method**       : `PATCH`
-- **URL**          : `https://simaju-backend.vercel.app/api/reminders/1/sent`
-- **Deskripsi**    : Mengubah status `is_sent` menjadi `true`
+- **URL**          : `/api/reminders/:id/sent`
+- **Deskripsi**    : Mengubah status pengingat menjadi sudah terkirim (`is_sent = true`)
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -667,61 +640,64 @@ erDiagram
     }
   }
   ```
-- **Response Error (404)**:
+
+#### 4. Menghapus Pengingat (DELETE)
+- **Method**       : `DELETE`
+- **URL**          : `/api/reminders/:id`
+- **Deskripsi**    : Menghapus pengingat dari sistem
+- **Headers**      : *None*
+- **Request Body** : *None*
+- **Response Sukses (200)**:
   ```json
   {
-    "error": "Pengingat dengan ID 1 tidak ditemukan"
+    "message": "Pengingat berhasil dihapus",
+    "deleted_id": 1
   }
   ```
 
 ---
 
-## 4. Cara Menjalankan Project Secara Lokal
+## Menjalankan Secara Lokal
 
 ### Prasyarat
-- Node.js versi 18 atau lebih tinggi
-- PostgreSQL (Lokal atau Cloud Neon.tech)
+- Node.js versi 18 ke atas
+- Database PostgreSQL (Lokal atau Cloud Neon.tech)
 
-### Langkah Menjalankan:
-1. **Buka folder proyek**:
+### Langkah Instalasi
+1. Clone repositori dan masuk ke direktori proyek:
    ```bash
-   cd /home/ciel/Documents/simaju-backend
+   git clone https://github.com/misaelsammy/simaju-backend.git
+   cd simaju-backend
    ```
-2. **Install dependensi**:
+
+2. Pasang dependensi:
    ```bash
    npm install
    ```
-3. **Konfigurasi Environment**:
-   Salin `.env.example` ke `.env`:
+
+3. Salin konfigurasi environment:
    ```bash
    cp .env.example .env
    ```
-   Isi nilai `DATABASE_URL` dengan connection string database PostgreSQL Anda (misalnya dari Neon.tech):
-   ```env
-   PORT=3000
-   DATABASE_URL=postgresql://user:password@ep-sample.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
-   ```
-4. **Inisialisasi Tabel & Seeder Database**:
+   Atur nilai `DATABASE_URL` pada file `.env` dengan kredensial PostgreSQL Anda.
+
+4. Inisialisasi skema tabel dan data awal:
    ```bash
    npm run db:init
    npm run db:seed
    ```
-5. **Jalankan Server Lokal**:
+
+5. Jalankan server lokal:
    ```bash
    npm run dev
-   # Atau: npm start
    ```
-   Akses `http://localhost:3000` di browser atau Postman.
+   Server aktif dan dapat diakses di `http://localhost:3000`.
 
 ---
 
-## 5. Panduan Pengujian (Thunder Client / Postman)
+## Pengujian API
 
-1. Buka aplikasi **Postman** atau ekstensi **Thunder Client** di VS Code.
-2. Klik tombol **Import** dan pilih file:
-   [`simaju_api_collection.json`](./simaju_api_collection.json)
-3. Sesuaikan variabel koleksi:
-   - Untuk tes lokal: `base_url` = `http://localhost:3000`
-   - Untuk tes deployment Vercel: `base_url` = `https://simaju-backend.vercel.app`
-4. Jalankan setiap request pada koleksi untuk mengambil tangkapan layar (screenshot) sebagai bukti pengujian tugas.
-
+Seluruh endpoint telah dipetakan ke dalam format Postman Collection v2.1.0:
+- File koleksi: [`simaju_api_collection.json`](./simaju_api_collection.json)
+- Kompatibel langsung dengan **Thunder Client** (VS Code) maupun **Postman**.
+- Cukup import file tersebut, sesuaikan variabel `base_url` (`http://localhost:3000` atau URL publik Vercel), dan jalankan request pengujian.

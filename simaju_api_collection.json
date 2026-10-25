@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "b3e94a50-25e1-4c6e-82e7-f1388d019f6a",
-    "name": "SIMAJU REST API - Learning Labs Backend",
+    "name": "SIMAJU REST API",
     "description": "Koleksi pengujian REST API untuk SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu). Dibuat untuk pengujian di Postman / Thunder Client.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
