@@ -13,7 +13,11 @@ async function getAllGroups(req, res, next) {
       ORDER BY g.group_id ASC
     `);
 
-    res.status(200).json(result.rows);
+    res.status(200).json({
+      message: 'Berhasil mengambil daftar grup',
+      total: result.rows.length,
+      data: result.rows
+    });
   } catch (err) {
     next(err);
   }
@@ -46,7 +50,10 @@ async function getGroupById(req, res, next) {
     const groupData = groupRes.rows[0];
     groupData.members = membersRes.rows;
 
-    res.status(200).json(groupData);
+    res.status(200).json({
+      message: 'Berhasil mengambil detail grup',
+      data: groupData
+    });
   } catch (err) {
     next(err);
   }
@@ -82,7 +89,10 @@ async function createGroup(req, res, next) {
       [newGroup.group_id, created_by]
     );
 
-    res.status(201).json(newGroup);
+    res.status(201).json({
+      message: 'Grup berhasil dibuat',
+      data: newGroup
+    });
   } catch (err) {
     next(err);
   }

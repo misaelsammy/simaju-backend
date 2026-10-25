@@ -6,7 +6,11 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "base_url", "value": "https://simaju-backend.vercel.app", "type": "string" }
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
   ],
   "item": [
     {
@@ -14,13 +18,16 @@
       "item": [
         {
           "name": "Root Health Check",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Message field exists', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/", "host": ["{{base_url}}"], "path": [""] }, "description": "Pemeriksaan status server dan daftar rute aktif" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Pemeriksaan status server dan daftar rute aktif"
+          }
         }
       ]
     },
@@ -29,58 +36,95 @@
       "item": [
         {
           "name": "Register User",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 201', () => pm.response.to.have.status(201));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response contains user data', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.have.property('user_id'); if (j.data && j.data.user_id) pm.collectionVariables.set('user_id', j.data.user_id); });"
-          ] } }],
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Citra Dewi\",\n  \"email\": \"diana.lestari@simaju.app\",\n  \"password\": \"Rahasia123!\",\n  \"instansi\": \"Divisi Riset dan Inovasi\",\n  \"default_reminder_minutes\": 15,\n  \"theme\": \"dark\"\n}" }, "url": { "raw": "{{base_url}}/api/users/register", "host": ["{{base_url}}"], "path": ["api", "users", "register"] }, "description": "Mendaftarkan user baru dan membuat record preferensi (1-to-1)" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alex Pratama\",\n  \"email\": \"alex.pratama@simaju.app\",\n  \"password\": \"Rahasia123!\",\n  \"instansi\": \"Divisi Teknologi Informasi\",\n  \"default_reminder_minutes\": 15,\n  \"theme\": \"dark\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "register"]
+            },
+            "description": "Mendaftarkan user baru dan membuat record preferensi (1-to-1)"
+          }
         },
         {
           "name": "Login User",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response contains user data', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.have.property('user_id'); });"
-          ] } }],
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"email\": \"alex.pratama@simaju.app\",\n  \"password\": \"Rahasia123!\"\n}" }, "url": { "raw": "{{base_url}}/api/users/login", "host": ["{{base_url}}"], "path": ["api", "users", "login"] }, "description": "Verifikasi kredensial pengguna" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alex.pratama@simaju.app\",\n  \"password\": \"Rahasia123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Verifikasi kredensial pengguna"
+          }
         },
         {
           "name": "Get All Users",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response data is an array', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.be.an('array'); });"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api", "users"] }, "description": "Mengambil seluruh pengguna beserta preferensinya" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            },
+            "description": "Mengambil seluruh pengguna beserta preferensinya"
+          }
         },
         {
           "name": "Get User Profile By ID",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('User data has required fields', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.have.property('user_id'); pm.expect(j.data).to.have.property('name'); pm.expect(j.data).to.have.property('email'); });"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/users/1", "host": ["{{base_url}}"], "path": ["api", "users", "1"] }, "description": "Mengambil profil pengguna berdasarkan user_id" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            },
+            "description": "Mengambil profil pengguna berdasarkan user_id"
+          }
         },
         {
           "name": "Update User Profile (PUT)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Updated data returned', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); });"
-          ] } }],
-          "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"name\": \"Alex Pratama, S.Kom.\",\n  \"instansi\": \"Pusat Riset Data\",\n  \"default_reminder_minutes\": 30,\n  \"theme\": \"system\"\n}" }, "url": { "raw": "{{base_url}}/api/users/1", "host": ["{{base_url}}"], "path": ["api", "users", "1"] }, "description": "Memperbarui profil dan preferensi pengguna" }
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alex Pratama, S.Kom.\",\n  \"instansi\": \"Pusat Riset Data\",\n  \"default_reminder_minutes\": 30,\n  \"theme\": \"system\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            },
+            "description": "Memperbarui profil dan preferensi pengguna"
+          }
         }
       ]
     },
@@ -89,88 +133,162 @@
       "item": [
         {
           "name": "Get All Events",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response data is an array', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.be.an('array'); });"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/events", "host": ["{{base_url}}"], "path": ["api", "events"] }, "description": "Mengambil seluruh daftar jadwal kegiatan" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Mengambil seluruh daftar jadwal kegiatan"
+          }
         },
         {
           "name": "Get Events by Date Range & User",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response data is an array', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.be.an('array'); });"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30", "host": ["{{base_url}}"], "path": ["api", "events"], "query": [{ "key": "user_id", "value": "1" }, { "key": "start_date", "value": "2026-11-01" }, { "key": "end_date", "value": "2026-11-30" }] }, "description": "Filter jadwal berdasarkan rentang tanggal dan user" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                },
+                {
+                  "key": "start_date",
+                  "value": "2026-11-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2026-11-30"
+                }
+              ]
+            },
+            "description": "Filter jadwal berdasarkan rentang tanggal dan user"
+          }
         },
         {
           "name": "Check Schedule Conflict",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response has has_conflict field', () => pm.expect(pm.response.json()).to.have.property('has_conflict'));"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/events/check-conflict?user_id=1&start_time=2026-11-01T09:30:00&end_time=2026-11-01T10:30:00", "host": ["{{base_url}}"], "path": ["api", "events", "check-conflict"], "query": [{ "key": "user_id", "value": "1" }, { "key": "start_time", "value": "2026-11-01T09:30:00" }, { "key": "end_time", "value": "2026-11-01T10:30:00" }] }, "description": "Mengecek apakah calon jadwal bentrok dengan jadwal yang sudah ada" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/check-conflict?user_id=1&start_time=2026-11-01T09:30:00&end_time=2026-11-01T10:30:00",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "check-conflict"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                },
+                {
+                  "key": "start_time",
+                  "value": "2026-11-01T09:30:00"
+                },
+                {
+                  "key": "end_time",
+                  "value": "2026-11-01T10:30:00"
+                }
+              ]
+            },
+            "description": "Mengecek apakah calon jadwal bentrok dengan jadwal yang sudah ada"
+          }
         },
         {
           "name": "Get Event By ID",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "if (pm.response.code === 200) { pm.test('Event data has required fields', () => { const j = pm.response.json(); pm.expect(j.data).to.have.property('event_id'); pm.expect(j.data).to.have.property('title'); }); }"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/events/2", "host": ["{{base_url}}"], "path": ["api", "events", "2"] }, "description": "Mengambil detail satu jadwal beserta daftar reminders-nya" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1"]
+            },
+            "description": "Mengambil detail satu jadwal beserta daftar reminders-nya"
+          }
         },
         {
           "name": "Create Event (POST)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 201', () => pm.response.to.have.status(201));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Created event has event_id', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.have.property('event_id'); pm.collectionVariables.set('event_id', j.data.event_id); });"
-          ] } }],
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"user_id\": 1,\n  \"title\": \"Rapat Koordinasi Backend\",\n  \"description\": \"Demo endpoint Vercel dan pengujian database relational\",\n  \"start_time\": \"2027-03-10T09:00:00\",\n  \"end_time\": \"2027-03-10T11:00:00\",\n  \"allow_conflict\": false\n}" }, "url": { "raw": "{{base_url}}/api/events", "host": ["{{base_url}}"], "path": ["api", "events"] }, "description": "Membuat jadwal baru dengan validasi bentrok waktu" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"group_id\": 1,\n  \"title\": \"Presentasi Final Task Backend\",\n  \"description\": \"Demo endpoint Vercel dan pengujian database relational\",\n  \"start_time\": \"2026-11-10T10:00:00\",\n  \"end_time\": \"2026-11-10T12:00:00\",\n  \"allow_conflict\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Membuat jadwal baru dengan validasi bentrok waktu"
+          }
         },
         {
           "name": "Create Recurring Event (POST)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 201', () => pm.response.to.have.status(201));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Recurring event has event_id', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.have.property('event_id'); });"
-          ] } }],
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"user_id\": 1,\n  \"title\": \"Asistensi Praktikum Mingguan\",\n  \"description\": \"Konsultasi berkala setiap Senin pagi\",\n  \"start_time\": \"2027-03-17T08:00:00\",\n  \"end_time\": \"2027-03-17T10:00:00\",\n  \"recurring\": {\n    \"frequency\": \"weekly\",\n    \"end_date\": \"2027-02-28\"\n  }\n}" }, "url": { "raw": "{{base_url}}/api/events", "host": ["{{base_url}}"], "path": ["api", "events"] }, "description": "Membuat jadwal yang berulang dengan menyertakan objek recurring" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"title\": \"Asistensi Praktikum Mingguan\",\n  \"description\": \"Konsultasi berkala setiap Senin pagi\",\n  \"start_time\": \"2026-11-16T08:00:00\",\n  \"end_time\": \"2026-11-16T10:00:00\",\n  \"recurring\": {\n    \"frequency\": \"weekly\",\n    \"end_date\": \"2026-12-31\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Membuat jadwal yang berulang dengan menyertakan objek recurring"
+          }
         },
         {
           "name": "Update Event (PUT)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"title\": \"Rapat Koordinasi Backend (Revisi Lokasi)\",\n  \"description\": \"Dipindah ke Ruang Sidang Utama Lantai 3\",\n  \"start_time\": \"2026-12-05T10:30:00\",\n  \"end_time\": \"2026-12-05T12:30:00\"\n}" }, "url": { "raw": "{{base_url}}/api/events/2", "host": ["{{base_url}}"], "path": ["api", "events", "2"] }, "description": "Mengubah data jadwal yang sudah ada" }
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Presentasi Final Task Backend (Revisi Ruangan)\",\n  \"description\": \"Dipindah ke Ruang Sidang Utama Lantai 3\",\n  \"start_time\": \"2026-11-10T10:30:00\",\n  \"end_time\": \"2026-11-10T12:30:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1"]
+            },
+            "description": "Mengubah data jadwal yang sudah ada"
+          }
         },
         {
           "name": "Delete Event (DELETE)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "DELETE", "header": [], "url": { "raw": "{{base_url}}/api/events/5", "host": ["{{base_url}}"], "path": ["api", "events", "5"] }, "description": "Menghapus jadwal kegiatan" }
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1"]
+            },
+            "description": "Menghapus jadwal kegiatan"
+          }
         }
       ]
     },
@@ -179,66 +297,99 @@
       "item": [
         {
           "name": "Get All Groups",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response data is an array', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.be.an('array'); });"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/groups", "host": ["{{base_url}}"], "path": ["api", "groups"] }, "description": "Mengambil seluruh daftar grup kolaborasi" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups"]
+            },
+            "description": "Mengambil seluruh daftar grup kolaborasi"
+          }
         },
         {
           "name": "Get Group By ID",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "if (pm.response.code === 200) { pm.test('Group has required fields', () => { const j = pm.response.json(); pm.expect(j.data).to.have.property('group_id'); pm.expect(j.data).to.have.property('group_name'); }); }"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/groups/1", "host": ["{{base_url}}"], "path": ["api", "groups", "1"] }, "description": "Mengambil rincian grup beserta seluruh anggotanya" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1"]
+            },
+            "description": "Mengambil rincian grup beserta seluruh anggotanya"
+          }
         },
         {
           "name": "Create Group (POST)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 201', () => pm.response.to.have.status(201));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Created group has group_id', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.have.property('group_id'); pm.collectionVariables.set('group_id', j.data.group_id); });"
-          ] } }],
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"group_name\": \"Grup Studi Cloud & DevOps\",\n  \"created_by\": 1\n}" }, "url": { "raw": "{{base_url}}/api/groups", "host": ["{{base_url}}"], "path": ["api", "groups"] }, "description": "Membuat grup kolaborasi baru" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"group_name\": \"Grup Studi Cloud & DevOps\",\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups"]
+            },
+            "description": "Membuat grup kolaborasi baru"
+          }
         },
         {
           "name": "Add Member to Group (POST)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 201', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"user_id\": 2\n}" }, "url": { "raw": "{{base_url}}/api/groups/1/members", "host": ["{{base_url}}"], "path": ["api", "groups", "1", "members"] }, "description": "Menambahkan anggota baru ke grup (relasi pivot group_members)" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/groups/1/members",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1", "members"]
+            },
+            "description": "Menambahkan anggota baru ke grup (relasi pivot group_members)"
+          }
         },
         {
           "name": "Get Group Shared Events",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/groups/1/events", "host": ["{{base_url}}"], "path": ["api", "groups", "1", "events"] }, "description": "Mengambil semua jadwal yang dibagikan ke suatu grup" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/1/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1", "events"]
+            },
+            "description": "Mengambil semua jadwal yang dibagikan ke suatu grup"
+          }
         },
         {
           "name": "Remove Member from Group (DELETE)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "DELETE", "header": [], "url": { "raw": "{{base_url}}/api/groups/1/members/2", "host": ["{{base_url}}"], "path": ["api", "groups", "1", "members", "2"] }, "description": "Mengeluarkan anggota dari grup" }
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/groups/1/members/2",
+              "host": ["{{base_url}}"],
+              "path": ["api", "groups", "1", "members", "2"]
+            },
+            "description": "Mengeluarkan anggota dari grup"
+          }
         }
       ]
     },
@@ -247,56 +398,83 @@
       "item": [
         {
           "name": "Get All Reminders",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response data is an array', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.be.an('array'); });"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/reminders", "host": ["{{base_url}}"], "path": ["api", "reminders"] }, "description": "Mengambil seluruh daftar pengingat jadwal" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders"]
+            },
+            "description": "Mengambil seluruh daftar pengingat jadwal"
+          }
         },
         {
           "name": "Get Upcoming Reminders",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Response data is an array', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.be.an('array'); });"
-          ] } }],
-          "request": { "method": "GET", "header": [], "url": { "raw": "{{base_url}}/api/reminders?upcoming=true", "host": ["{{base_url}}"], "path": ["api", "reminders"], "query": [{ "key": "upcoming", "value": "true" }] }, "description": "Mengambil pengingat yang akan jatuh tempo dan belum terkirim" }
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders?upcoming=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders"],
+              "query": [
+                {
+                  "key": "upcoming",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Mengambil pengingat yang akan jatuh tempo dan belum terkirim"
+          }
         },
         {
           "name": "Create Reminder (POST)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 201', () => pm.response.to.have.status(201));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));",
-            "pm.test('Created reminder has reminder_id', () => { const j = pm.response.json(); pm.expect(j).to.have.property('data'); pm.expect(j.data).to.have.property('reminder_id'); pm.collectionVariables.set('reminder_id', j.data.reminder_id); });"
-          ] } }],
-          "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"event_id\": 2,\n  \"remind_at\": \"2026-11-03T13:45:00\",\n  \"notification_type\": \"push_notification\"\n}" }, "url": { "raw": "{{base_url}}/api/reminders", "host": ["{{base_url}}"], "path": ["api", "reminders"] }, "description": "Menambahkan pengingat untuk sebuah jadwal" }
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": 1,\n  \"remind_at\": \"2026-11-10T09:45:00\",\n  \"notification_type\": \"push_notification\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reminders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders"]
+            },
+            "description": "Menambahkan pengingat untuk sebuah jadwal"
+          }
         },
         {
           "name": "Mark Reminder As Sent (PATCH)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "PATCH", "header": [], "url": { "raw": "{{base_url}}/api/reminders/2/sent", "host": ["{{base_url}}"], "path": ["api", "reminders", "2", "sent"] }, "description": "Menandai pengingat sudah terkirim (is_sent = true)" }
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders/1/sent",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders", "1", "sent"]
+            },
+            "description": "Menandai pengingat sudah terkirim (is_sent = true)"
+          }
         },
         {
           "name": "Delete Reminder (DELETE)",
-          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
-            "pm.test('Status code is 200 or 404', () => pm.expect(pm.response.code).to.be.oneOf([200, 404]));",
-            "pm.test('Response is JSON', () => pm.response.to.be.json);",
-            "pm.test('Response time < 3000ms', () => pm.expect(pm.response.responseTime).to.be.below(3000));",
-            "pm.test('Response contains message', () => pm.expect(pm.response.json()).to.have.property('message'));"
-          ] } }],
-          "request": { "method": "DELETE", "header": [], "url": { "raw": "{{base_url}}/api/reminders/2", "host": ["{{base_url}}"], "path": ["api", "reminders", "2"] }, "description": "Menghapus pengingat" }
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/reminders/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "reminders", "1"]
+            },
+            "description": "Menghapus pengingat"
+          }
         }
       ]
     }

@@ -62,7 +62,11 @@ async function getAllEvents(req, res, next) {
 
     const result = await db.query(queryStr, params);
 
-    res.status(200).json(result.rows);
+    res.status(200).json({
+      message: 'Berhasil mengambil daftar jadwal kegiatan',
+      total: result.rows.length,
+      data: result.rows
+    });
   } catch (err) {
     next(err);
   }
@@ -100,7 +104,10 @@ async function getEventById(req, res, next) {
     const eventData = eventResult.rows[0];
     eventData.reminders = remindersResult.rows;
 
-    res.status(200).json(eventData);
+    res.status(200).json({
+      message: 'Berhasil mengambil detail jadwal',
+      data: eventData
+    });
   } catch (err) {
     next(err);
   }
@@ -159,7 +166,10 @@ async function createEvent(req, res, next) {
       [user_id, group_id || null, patternId, title, description || null, start_time, end_time]
     );
 
-    res.status(201).json(result.rows[0]);
+    res.status(201).json({
+      message: 'Jadwal berhasil ditambahkan',
+      data: result.rows[0]
+    });
   } catch (err) {
     next(err);
   }
