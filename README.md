@@ -56,8 +56,8 @@ erDiagram
     }
 
     GROUP_MEMBERS {
-        int group_id FK
-        int user_id FK
+        int group_id PK,FK
+        int user_id PK,FK
         timestamp joined_at
     }
 
@@ -73,7 +73,7 @@ erDiagram
         int group_id FK
         int pattern_id FK
         string title
-        string description
+        text description
         timestamp start_time
         timestamp end_time
         boolean is_skipped
@@ -88,15 +88,11 @@ erDiagram
     }
 ```
 
-> **Catatan Skema**: Definisi skema basis data dalam format DBML tersedia pada file [`schema.dbml`](./schema.dbml).
+### Penjelasan Entitas & Relasi Tabel
 
----
-
-## Struktur Tabel
-
-1. **`users`**: Menyimpan data identitas pengguna (nama, email unik, kredensial terenkripsi, instansi).
-2. **`user_preferences`**: Relasi One-to-One dengan `users` untuk menyimpan preferensi waktu pengingat dan tema aplikasi.
-3. **`groups`**: Menyimpan daftar grup kolaborasi jadwal yang dibuat pengguna.
+1. **`users`**: Menyimpan identitas akun pengguna dan instansi.
+2. **`user_preferences`**: Relasi One-to-One dengan `users` untuk preferensi tema dan default waktu pengingat.
+3. **`groups`**: Menyimpan grup kerja/tim kolaborasi yang dibuat oleh pengguna.
 4. **`group_members`**: Tabel perantara (pivot Many-to-Many) antara pengguna dan grup.
 5. **`recurring_patterns`**: Definisi pola frekuensi perulangan agenda dan tanggal berakhir.
 6. **`events`**: Entitas utama penyimpanan seluruh jadwal kegiatan personal maupun grup.
@@ -136,7 +132,31 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 
 ### B. Pengguna & Autentikasi (`/api/users`)
 
-#### 1. Registrasi Pengguna
+#### 1. Mengambil Seluruh Pengguna
+- **Method**       : `GET`
+- **URL**          : `/api/users`
+- **Deskripsi**    : Mengambil seluruh daftar pengguna beserta preferensi tampilannya
+- **Headers**      : *None*
+- **Request Body** : *None*
+- **Response Sukses (200)**:
+  ```json
+  {
+    "message": "Berhasil mengambil daftar pengguna",
+    "total": 6,
+    "data": [
+      {
+        "user_id": 1,
+        "name": "Alex Pratama, S.Kom.",
+        "email": "alex@simaju.app",
+        "instansi": "Pusat Riset Data",
+        "default_reminder_minutes": 30,
+        "theme": "system"
+      }
+    ]
+  }
+  ```
+
+#### 2. Registrasi Pengguna
 - **Method**       : `POST`
 - **URL**          : `/api/users/register`
 - **Deskripsi**    : Mendaftarkan akun pengguna baru sekaligus menginisialisasi record preferensi bawaan
@@ -144,12 +164,12 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 - **Request Body** :
   ```json
   {
-    "name": "Alex Pratama",
-    "email": "alex.pratama@simaju.app",
-    "password": "PasswordAman123!",
-    "instansi": "Divisi Teknologi Informasi",
+    "name": "Citra Dewi",
+    "email": "citra.dewi@simaju.app",
+    "password": "Password123!",
+    "instansi": "Biro Perencanaan dan Keuangan",
     "default_reminder_minutes": 15,
-    "theme": "dark"
+    "theme": "light"
   }
   ```
 - **Response Sukses (201)**:
@@ -157,30 +177,24 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   {
     "message": "Registrasi pengguna berhasil",
     "data": {
-      "user_id": 1,
-      "name": "Alex Pratama",
-      "email": "alex.pratama@simaju.app",
-      "instansi": "Divisi Teknologi Informasi"
+      "user_id": 7,
+      "name": "Citra Dewi",
+      "email": "citra.dewi@simaju.app",
+      "instansi": "Biro Perencanaan dan Keuangan"
     }
   }
   ```
-- **Response Error (400)**:
-  ```json
-  {
-    "error": "Field name, email, dan password wajib diisi"
-  }
-  ```
 
-#### 2. Login Pengguna
+#### 3. Login Pengguna
 - **Method**       : `POST`
 - **URL**          : `/api/users/login`
-- **Deskripsi**    : Memverifikasi kredensial pengguna untuk masuk ke aplikasi
+- **Deskripsi**    : Memverifikasi email dan password untuk autentikasi pengguna
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
-    "email": "alex.pratama@simaju.app",
-    "password": "PasswordAman123!"
+    "email": "alex@simaju.app",
+    "password": "hashed_pass_alex"
   }
   ```
 - **Response Sukses (200)**:
@@ -189,23 +203,17 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
     "message": "Login berhasil",
     "data": {
       "user_id": 1,
-      "name": "Alex Pratama",
-      "email": "alex.pratama@simaju.app",
-      "instansi": "Divisi Teknologi Informasi"
+      "name": "Alex Pratama, S.Kom.",
+      "email": "alex@simaju.app",
+      "instansi": "Pusat Riset Data"
     }
   }
   ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Pengguna dengan email tersebut tidak ditemukan"
-  }
-  ```
 
-#### 3. Mengambil Profil Pengguna
+#### 4. Mengambil Profil Pengguna
 - **Method**       : `GET`
 - **URL**          : `/api/users/:id`
-- **Deskripsi**    : Mengambil data profil dan preferensi pengguna berdasarkan ID
+- **Deskripsi**    : Mengambil detail informasi akun pengguna dan preferensi bawaannya
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
@@ -214,46 +222,40 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
     "message": "Berhasil mengambil profil pengguna",
     "data": {
       "user_id": 1,
-      "name": "Alex Pratama",
-      "email": "alex.pratama@simaju.app",
-      "instansi": "Divisi Teknologi Informasi",
-      "default_reminder_minutes": 15,
-      "theme": "dark"
+      "name": "Alex Pratama, S.Kom.",
+      "email": "alex@simaju.app",
+      "instansi": "Pusat Riset Data",
+      "default_reminder_minutes": 30,
+      "theme": "system"
     }
   }
   ```
-- **Response Error (404)**:
-  ```json
-  {
-    "error": "Pengguna dengan ID 1 tidak ditemukan"
-  }
-  ```
 
-#### 4. Memperbarui Profil Pengguna
+#### 5. Memperbarui Profil Pengguna
 - **Method**       : `PUT`
 - **URL**          : `/api/users/:id`
-- **Deskripsi**    : Memperbarui data pengguna dan preferensi tampilan/notifikasi
+- **Deskripsi**    : Memperbarui nama, instansi, atau pengaturan tema dan pengingat pengguna
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
-    "name": "Alex Pratama, S.Kom.",
-    "instansi": "Pusat Riset Data",
-    "default_reminder_minutes": 30,
-    "theme": "light"
+    "name": "Alex Pratama, M.Kom.",
+    "instansi": "Pusat Riset Data Nasional",
+    "default_reminder_minutes": 45,
+    "theme": "dark"
   }
   ```
 - **Response Sukses (200)**:
   ```json
   {
-    "message": "Profil pengguna berhasil diperbarui",
+    "message": "Profil dan preferensi pengguna berhasil diperbarui",
     "data": {
       "user_id": 1,
-      "name": "Alex Pratama, S.Kom.",
-      "email": "alex.pratama@simaju.app",
-      "instansi": "Pusat Riset Data",
-      "default_reminder_minutes": 30,
-      "theme": "light"
+      "name": "Alex Pratama, M.Kom.",
+      "email": "alex@simaju.app",
+      "instansi": "Pusat Riset Data Nasional",
+      "default_reminder_minutes": 45,
+      "theme": "dark"
     }
   }
   ```
@@ -264,7 +266,7 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 
 #### 1. Mengambil Daftar Seluruh Jadwal
 - **Method**       : `GET`
-- **URL**          : `/api/events?user_id=1&start_date=2026-11-01&end_date=2026-11-30`
+- **URL**          : `/api/events` (opsional filter query: `?user_id=1&start_date=2026-11-01&end_date=2026-11-30`)
 - **Deskripsi**    : Mengambil daftar kegiatan kalender dengan filter rentang tanggal dan user
 - **Headers**      : *None*
 - **Request Body** : *None*
@@ -272,19 +274,20 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   ```json
   {
     "message": "Berhasil mengambil daftar jadwal kegiatan",
-    "total": 1,
+    "total": 8,
     "data": [
       {
-        "event_id": 1,
+        "event_id": 2,
         "user_id": 1,
-        "user_name": "Alex Pratama",
-        "group_id": 1,
-        "group_name": "Tim Pengembang SIMAJU",
-        "pattern_id": null,
-        "title": "Sprint Planning SIMAJU",
-        "description": "Rapat mingguan pembahasan backlog dan implementasi fitur",
-        "start_time": "2026-11-01T09:00:00.000Z",
-        "end_time": "2026-11-01T11:00:00.000Z",
+        "user_name": "Alex Pratama, S.Kom.",
+        "group_id": null,
+        "group_name": null,
+        "pattern_id": 1,
+        "recurring_frequency": "weekly",
+        "title": "Evaluasi Proyek Mingguan",
+        "description": "Review sprint progres Q4 di Ruang Rapat Utama A",
+        "start_time": "2026-11-03T14:00:00.000Z",
+        "end_time": "2026-11-03T16:00:00.000Z",
         "is_skipped": false
       }
     ]
@@ -293,23 +296,26 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 
 #### 2. Deteksi Bentrok Jadwal (Check Conflict)
 - **Method**       : `GET`
-- **URL**          : `/api/events/check-conflict?user_id=1&start_time=2026-11-01T09:30:00&end_time=2026-11-01T10:30:00`
+- **URL**          : `/api/events/check-conflict?user_id=1&start_time=2026-11-10T09:00:00&end_time=2026-11-10T11:00:00`
 - **Deskripsi**    : Memeriksa apakah calon agenda bertabrakan dengan agenda lain yang sudah terdaftar
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
   ```json
   {
-    "has_conflict": true,
-    "total_conflicts": 1,
-    "conflicts": [
-      {
-        "event_id": 1,
-        "title": "Sprint Planning SIMAJU",
-        "start_time": "2026-11-01T09:00:00.000Z",
-        "end_time": "2026-11-01T11:00:00.000Z"
-      }
-    ]
+    "message": "Pengecekan konflik selesai",
+    "data": {
+      "has_conflict": true,
+      "conflict_count": 1,
+      "conflicts": [
+        {
+          "event_id": 4,
+          "title": "Presentasi Final Task Backend",
+          "start_time": "2026-11-10T10:00:00.000Z",
+          "end_time": "2026-11-10T12:00:00.000Z"
+        }
+      ]
+    }
   }
   ```
 
@@ -324,24 +330,26 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   {
     "message": "Berhasil mengambil detail jadwal",
     "data": {
-      "event_id": 1,
+      "event_id": 2,
       "user_id": 1,
-      "user_name": "Alex Pratama",
-      "user_email": "alex.pratama@simaju.app",
-      "group_id": 1,
-      "group_name": "Tim Pengembang SIMAJU",
-      "pattern_id": null,
-      "title": "Sprint Planning SIMAJU",
-      "description": "Rapat mingguan pembahasan backlog dan implementasi fitur",
-      "start_time": "2026-11-01T09:00:00.000Z",
-      "end_time": "2026-11-01T11:00:00.000Z",
+      "user_name": "Alex Pratama, S.Kom.",
+      "user_email": "alex@simaju.app",
+      "group_id": null,
+      "group_name": null,
+      "pattern_id": 1,
+      "recurring_frequency": "weekly",
+      "recurring_end_date": "2026-12-31",
+      "title": "Evaluasi Proyek Mingguan",
+      "description": "Review sprint progres Q4 di Ruang Rapat Utama A",
+      "start_time": "2026-11-03T14:00:00.000Z",
+      "end_time": "2026-11-03T16:00:00.000Z",
       "is_skipped": false,
       "reminders": [
         {
-          "reminder_id": 1,
-          "remind_at": "2026-11-01T08:45:00.000Z",
-          "is_sent": false,
-          "notification_type": "email"
+          "reminder_id": 3,
+          "remind_at": "2026-11-03T13:45:00.000Z",
+          "notification_type": "email",
+          "is_sent": false
         }
       ]
     }
@@ -351,18 +359,17 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 #### 4. Menambahkan Jadwal Baru (POST)
 - **Method**       : `POST`
 - **URL**          : `/api/events`
-- **Deskripsi**    : Menambahkan agenda baru dengan pencegahan bentrok otomatis
+- **Deskripsi**    : Menambahkan agenda mandiri baru ke kalender sistem (dengan validasi bentrok jadwal)
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
     "user_id": 1,
-    "group_id": 1,
-    "title": "Presentasi Arsitektur Sistem",
-    "description": "Paparan teknis implementasi database relasional dan API serverless",
-    "start_time": "2026-11-10T10:00:00",
-    "end_time": "2026-11-10T12:00:00",
-    "allow_conflict": false
+    "title": "Sosialisasi Roadmap AI Nasional",
+    "description": "Pembahasan implementasi roadmap kecerdasan buatan terpadu",
+    "start_time": "2026-12-05T09:00:00",
+    "end_time": "2026-12-05T11:30:00",
+    "allow_conflict": true
   }
   ```
 - **Response Sukses (201)**:
@@ -370,50 +377,35 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   {
     "message": "Jadwal berhasil ditambahkan",
     "data": {
-      "event_id": 4,
+      "event_id": 9,
       "user_id": 1,
-      "group_id": 1,
+      "group_id": null,
       "pattern_id": null,
-      "title": "Presentasi Arsitektur Sistem",
-      "description": "Paparan teknis implementasi database relasional dan API serverless",
-      "start_time": "2026-11-10T10:00:00.000Z",
-      "end_time": "2026-11-10T12:00:00.000Z",
+      "title": "Sosialisasi Roadmap AI Nasional",
+      "description": "Pembahasan implementasi roadmap kecerdasan buatan terpadu",
+      "start_time": "2026-12-05T09:00:00.000Z",
+      "end_time": "2026-12-05T11:30:00.000Z",
       "is_skipped": false
     }
-  }
-  ```
-- **Response Error (400)**:
-  ```json
-  {
-    "error": "Jadwal bentrok dengan kegiatan yang sudah ada",
-    "conflicts": [
-      {
-        "event_id": 1,
-        "title": "Sprint Planning SIMAJU",
-        "start_time": "2026-11-10T09:00:00.000Z",
-        "end_time": "2026-11-10T11:00:00.000Z"
-      }
-    ]
   }
   ```
 
 #### 5. Menambahkan Jadwal Berulang (Recurring Event)
 - **Method**       : `POST`
 - **URL**          : `/api/events`
-- **Deskripsi**    : Membuat jadwal berkala sekaligus mengaitkannya dengan pola frekuensi
+- **Deskripsi**    : Menambahkan agenda dengan frekuensi perulangan (`daily`, `weekly`, `monthly`)
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
     "user_id": 1,
-    "title": "Review Proyek Mingguan",
-    "description": "Sinkronisasi capaian tim setiap awal pekan",
-    "start_time": "2026-11-16T08:00:00",
-    "end_time": "2026-11-16T10:00:00",
-    "recurring": {
-      "frequency": "weekly",
-      "end_date": "2026-12-31"
-    }
+    "title": "Rapat Koordinasi Rutin Divisi IT",
+    "description": "Sinkronisasi sprint mingguan",
+    "start_time": "2026-12-01T13:00:00",
+    "end_time": "2026-12-01T14:30:00",
+    "frequency": "weekly",
+    "end_date": "2026-12-31",
+    "allow_conflict": true
   }
   ```
 - **Response Sukses (201)**:
@@ -421,12 +413,14 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   {
     "message": "Jadwal berhasil ditambahkan",
     "data": {
-      "event_id": 5,
+      "event_id": 10,
       "user_id": 1,
+      "group_id": null,
       "pattern_id": 2,
-      "title": "Review Proyek Mingguan",
-      "start_time": "2026-11-16T08:00:00.000Z",
-      "end_time": "2026-11-16T10:00:00.000Z"
+      "title": "Rapat Koordinasi Rutin Divisi IT",
+      "start_time": "2026-12-01T13:00:00.000Z",
+      "end_time": "2026-12-01T14:30:00.000Z",
+      "is_skipped": false
     }
   }
   ```
@@ -434,15 +428,16 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 #### 6. Mengubah Detail Jadwal (PUT)
 - **Method**       : `PUT`
 - **URL**          : `/api/events/:id`
-- **Deskripsi**    : Memperbarui judul, rincian, waktu, atau status agenda
+- **Deskripsi**    : Memperbarui judul, rincian, waktu, atau status skip agenda
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
-    "title": "Presentasi Arsitektur Sistem (Sesi Lanjutan)",
-    "description": "Pembahasan tambahan terkait integrasi sistem cloud",
-    "start_time": "2026-11-10T10:30:00",
-    "end_time": "2026-11-10T12:30:00"
+    "title": "Evaluasi Proyek Mingguan (Update Ruangan)",
+    "description": "Review sprint progres Q4 di Ruang Rapat Utama B",
+    "start_time": "2026-11-10T10:00:00",
+    "end_time": "2026-11-10T12:00:00",
+    "is_skipped": false
   }
   ```
 - **Response Sukses (200)**:
@@ -450,11 +445,11 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   {
     "message": "Jadwal berhasil diperbarui",
     "data": {
-      "event_id": 1,
-      "title": "Presentasi Arsitektur Sistem (Sesi Lanjutan)",
-      "description": "Pembahasan tambahan terkait integrasi sistem cloud",
-      "start_time": "2026-11-10T10:30:00.000Z",
-      "end_time": "2026-11-10T12:30:00.000Z",
+      "event_id": 2,
+      "title": "Evaluasi Proyek Mingguan (Update Ruangan)",
+      "description": "Review sprint progres Q4 di Ruang Rapat Utama B",
+      "start_time": "2026-11-10T10:00:00.000Z",
+      "end_time": "2026-11-10T12:00:00.000Z",
       "is_skipped": false
     }
   }
@@ -463,14 +458,17 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 #### 7. Menghapus Jadwal (DELETE)
 - **Method**       : `DELETE`
 - **URL**          : `/api/events/:id`
-- **Deskripsi**    : Menghapus kegiatan dari kalender sistem
+- **Deskripsi**    : Menghapus kegiatan dari kalender sistem (beserta cascading reminders)
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
   ```json
   {
-    "message": "Jadwal 'Presentasi Arsitektur Sistem' berhasil dihapus",
-    "deleted_id": 1
+    "message": "Jadwal dengan ID 9 berhasil dihapus",
+    "deleted_event": {
+      "event_id": 9,
+      "title": "Sosialisasi Roadmap AI Nasional"
+    }
   }
   ```
 
@@ -488,20 +486,47 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   ```json
   {
     "message": "Berhasil mengambil daftar grup",
-    "total": 1,
+    "total": 7,
     "data": [
       {
         "group_id": 1,
         "group_name": "Tim Pengembang SIMAJU",
         "created_by": 1,
-        "creator_name": "Alex Pratama",
+        "creator_name": "Alex Pratama, S.Kom.",
         "total_members": 2
       }
     ]
   }
   ```
 
-#### 2. Membuat Grup Baru
+#### 2. Mengambil Detail Grup & Anggota
+- **Method**       : `GET`
+- **URL**          : `/api/groups/:id`
+- **Deskripsi**    : Menampilkan detail grup beserta daftar anggota di dalamnya
+- **Headers**      : *None*
+- **Request Body** : *None*
+- **Response Sukses (200)**:
+  ```json
+  {
+    "message": "Berhasil mengambil detail grup",
+    "data": {
+      "group_id": 1,
+      "group_name": "Tim Pengembang SIMAJU",
+      "created_by": 1,
+      "creator_name": "Alex Pratama, S.Kom.",
+      "members": [
+        {
+          "user_id": 1,
+          "name": "Alex Pratama, S.Kom.",
+          "email": "alex@simaju.app",
+          "instansi": "Pusat Riset Data"
+        }
+      ]
+    }
+  }
+  ```
+
+#### 3. Membuat Grup Baru
 - **Method**       : `POST`
 - **URL**          : `/api/groups`
 - **Deskripsi**    : Membuat grup baru dan otomatis menjadikan pembuat sebagai anggota pertama
@@ -509,7 +534,8 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 - **Request Body** :
   ```json
   {
-    "group_name": "Divisi Cloud & DevOps",
+    "group_name": "Komite Transformasi Digital",
+    "description": "Kelompok kerja akselerasi digitalisasi instansi",
     "created_by": 1
   }
   ```
@@ -518,14 +544,14 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   {
     "message": "Grup berhasil dibuat",
     "data": {
-      "group_id": 3,
-      "group_name": "Divisi Cloud & DevOps",
+      "group_id": 8,
+      "group_name": "Komite Transformasi Digital",
       "created_by": 1
     }
   }
   ```
 
-#### 3. Menambahkan Anggota ke Grup
+#### 4. Menambahkan Anggota ke Grup
 - **Method**       : `POST`
 - **URL**          : `/api/groups/:id/members`
 - **Deskripsi**    : Memasukkan pengguna ke dalam grup (relasi pivot `group_members`)
@@ -533,21 +559,46 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 - **Request Body** :
   ```json
   {
-    "user_id": 2
+    "user_id": 3
   }
   ```
 - **Response Sukses (201)**:
   ```json
   {
-    "message": "Anggota berhasil ditambahkan ke dalam grup",
+    "message": "Pengguna berhasil ditambahkan ke grup",
     "data": {
       "group_id": 1,
-      "user_id": 2
+      "user_id": 3
     }
   }
   ```
 
-#### 4. Mengeluarkan Anggota dari Grup (DELETE)
+#### 5. Mengambil Jadwal Bersama Grup
+- **Method**       : `GET`
+- **URL**          : `/api/groups/:id/events`
+- **Deskripsi**    : Menampilkan semua jadwal kegiatan bersama yang terkait dengan grup tertentu
+- **Headers**      : *None*
+- **Request Body** : *None*
+- **Response Sukses (200)**:
+  ```json
+  {
+    "message": "Berhasil mengambil daftar jadwal untuk grup Tim Pengembang SIMAJU",
+    "total": 1,
+    "data": [
+      {
+        "event_id": 4,
+        "title": "Presentasi Final Task Backend",
+        "description": "Demo endpoint Vercel dan pengujian database relational",
+        "start_time": "2026-11-10T10:00:00.000Z",
+        "end_time": "2026-11-10T12:00:00.000Z",
+        "is_skipped": false,
+        "organizer_name": "Alex Pratama, S.Kom."
+      }
+    ]
+  }
+  ```
+
+#### 6. Mengeluarkan Anggota dari Grup (DELETE)
 - **Method**       : `DELETE`
 - **URL**          : `/api/groups/:id/members/:userId`
 - **Deskripsi**    : Menghapus keterikatan anggota dari suatu grup
@@ -556,11 +607,7 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 - **Response Sukses (200)**:
   ```json
   {
-    "message": "Anggota berhasil dikeluarkan dari grup",
-    "removed": {
-      "group_id": 1,
-      "user_id": 2
-    }
+    "message": "Pengguna dengan ID 3 berhasil dikeluarkan dari grup 1"
   }
   ```
 
@@ -568,27 +615,27 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 
 ### E. Manajemen Pengingat (`/api/reminders`)
 
-#### 1. Mengambil Pengingat Mendatang
+#### 1. Mengambil Seluruh Pengingat
 - **Method**       : `GET`
-- **URL**          : `/api/reminders?upcoming=true`
-- **Deskripsi**    : Mengambil daftar pengingat yang akan jatuh tempo dan belum terkirim
+- **URL**          : `/api/reminders` (opsional filter: `?is_sent=false`)
+- **Deskripsi**    : Mengambil daftar pengingat jadwal kegiatan beserta judul agenda dan pemiliknya
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
   ```json
   {
     "message": "Berhasil mengambil daftar pengingat",
-    "total": 1,
+    "total": 2,
     "data": [
       {
-        "reminder_id": 1,
-        "event_id": 1,
-        "event_title": "Sprint Planning SIMAJU",
-        "remind_at": "2026-11-01T08:45:00.000Z",
-        "is_sent": false,
+        "reminder_id": 3,
+        "event_id": 2,
+        "event_title": "Evaluasi Proyek Mingguan",
+        "event_start_time": "2026-11-03T14:00:00.000Z",
+        "remind_at": "2026-11-03T13:45:00.000Z",
         "notification_type": "email",
-        "user_name": "Alex Pratama",
-        "user_email": "alex.pratama@simaju.app"
+        "is_sent": false,
+        "user_name": "Alex Pratama, S.Kom."
       }
     ]
   }
@@ -597,13 +644,13 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 #### 2. Membuat Pengingat Baru (POST)
 - **Method**       : `POST`
 - **URL**          : `/api/reminders`
-- **Deskripsi**    : Mendaftarkan jadwal notifikasi pengingat untuk kegiatan tertentu
+- **Deskripsi**    : Menjadwalkan pengingat baru sebelum kegiatan berlangsung
 - **Headers**      : `Content-Type: application/json`
 - **Request Body** :
   ```json
   {
-    "event_id": 1,
-    "remind_at": "2026-11-01T08:30:00",
+    "event_id": 2,
+    "remind_at": "2026-11-10T09:45:00",
     "notification_type": "push_notification"
   }
   ```
@@ -612,11 +659,11 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
   {
     "message": "Pengingat berhasil dibuat",
     "data": {
-      "reminder_id": 3,
-      "event_id": 1,
-      "remind_at": "2026-11-01T08:30:00.000Z",
-      "is_sent": false,
-      "notification_type": "push_notification"
+      "reminder_id": 4,
+      "event_id": 2,
+      "remind_at": "2026-11-10T09:45:00.000Z",
+      "notification_type": "push_notification",
+      "is_sent": false
     }
   }
   ```
@@ -630,13 +677,10 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 - **Response Sukses (200)**:
   ```json
   {
-    "message": "Pengingat berhasil ditandai sebagai terkirim",
+    "message": "Pengingat berhasil ditandai sudah terkirim",
     "data": {
-      "reminder_id": 1,
-      "event_id": 1,
-      "remind_at": "2026-11-01T08:45:00.000Z",
-      "is_sent": true,
-      "notification_type": "email"
+      "reminder_id": 3,
+      "is_sent": true
     }
   }
   ```
@@ -644,14 +688,17 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 #### 4. Menghapus Pengingat (DELETE)
 - **Method**       : `DELETE`
 - **URL**          : `/api/reminders/:id`
-- **Deskripsi**    : Menghapus pengingat dari sistem
+- **Deskripsi**    : Menghapus notifikasi pengingat dari basis data
 - **Headers**      : *None*
 - **Request Body** : *None*
 - **Response Sukses (200)**:
   ```json
   {
-    "message": "Pengingat berhasil dihapus",
-    "deleted_id": 1
+    "message": "Pengingat dengan ID 4 berhasil dihapus",
+    "deleted_reminder": {
+      "reminder_id": 4,
+      "event_id": 2
+    }
   }
   ```
 
@@ -661,7 +708,7 @@ Base URL: `https://simaju-backend.vercel.app` (atau `http://localhost:3000` untu
 
 ### Prasyarat
 - Node.js versi 18 ke atas
-- Database PostgreSQL (Lokal atau Cloud Neon.tech)
+- Database PostgreSQL (Lokal atau Cloud Neon.tech / Supabase)
 
 ### Langkah Instalasi
 1. Clone repositori dan masuk ke direktori proyek:

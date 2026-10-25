@@ -7,7 +7,8 @@
     "start": "node api/index.js",
     "dev": "node --watch api/index.js",
     "db:init": "node src/scripts/init-db.js",
-    "db:seed": "node src/scripts/seed-db.js"
+    "db:seed": "node src/scripts/seed-db.js",
+    "collection:generate": "python3 build_simaju_collection.py"
   },
   "keywords": [
     "express",
@@ -16,7 +17,7 @@
     "simaju",
     "vercel"
   ],
-  "author": "SIMAJU Team",
+  "author": "Misael Sammy",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
