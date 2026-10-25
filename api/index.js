@@ -19,7 +19,6 @@ app.get('/', (req, res) => {
     success: true,
     message: 'SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu) REST API is running successfully',
     version: '1.0.0',
-    author: 'Misael Sammy Gideon (21114012610084)',
     endpoints: {
       users: '/api/users',
       events: '/api/events',

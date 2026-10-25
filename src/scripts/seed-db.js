@@ -15,8 +15,8 @@ async function seedDatabase() {
     const userRes = await client.query(`
       INSERT INTO users (name, email, password_hash, instansi)
       VALUES 
-        ('Misael Sammy Gideon', 'misael@simaju.ac.id', '$2b$10$SampleHashedPasswordForDemo1234567890', 'Universitas Dian Nuswantoro'),
-        ('Budi Santoso', 'budi.santoso@simaju.ac.id', '$2b$10$SampleHashedPasswordForDemo1234567890', 'Politeknik Negeri')
+        ('Alex Pratama', 'alex@simaju.app', '$2b$10$SampleHashedPasswordForDemo1234567890', 'Divisi Teknologi Informasi'),
+        ('Budi Santoso', 'budi@simaju.app', '$2b$10$SampleHashedPasswordForDemo1234567890', 'Pusat Riset Data')
       RETURNING user_id, name, email;
     `);
     const user1 = userRes.rows[0];

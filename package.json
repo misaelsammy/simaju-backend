@@ -16,7 +16,7 @@
     "simaju",
     "vercel"
   ],
-  "author": "Misael Sammy Gideon",
+  "author": "SIMAJU Team",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

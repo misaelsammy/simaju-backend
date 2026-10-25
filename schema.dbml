@@ -1,5 +1,4 @@
 // SIMAJU Database Schema (dbdiagram.io / DBML)
-// Author: Misael Sammy Gideon (21114012610084)
 
 Table users {
   user_id serial [pk, increment]

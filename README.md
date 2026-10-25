@@ -1,8 +1,7 @@
 # SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu) - REST API
 
-**Tugas Akhir Learning Labs: Backend Development**  
-- **Nama**: Misael Sammy Gideon  
-- **NIM**: 21114012610084  
+RESTful API backend untuk platform manajemen jadwal kegiatan, kolaborasi agenda grup/tim, pengulangan kegiatan rutin (*recurring events*), deteksi bentrok jadwal (*conflict detection*), serta pengingat otomatis (*reminders*). Proyek ini dibangun menggunakan **Node.js Express** dan **PostgreSQL (Neon Serverless)**, serta siap di-deploy secara serverless ke **Vercel**.
+
 - **Teknologi**: Node.js, Express.js, PostgreSQL (Serverless via Neon / Supabase), Vercel  
 - **Deployment URL**: `https://simaju-backend.vercel.app` *(sesuaikan dengan URL Vercel setelah di-deploy)*  
 
@@ -115,7 +114,6 @@ erDiagram
     "success": true,
     "message": "SIMAJU (Sistem Informasi Manajemen Jadwal Terpadu) REST API is running successfully",
     "version": "1.0.0",
-    "author": "Misael Sammy Gideon (21114012610084)",
     "endpoints": {
       "users": "/api/users",
       "events": "/api/events",
@@ -144,10 +142,10 @@ erDiagram
 - **Request Body** :
   ```json
   {
-    "name": "Misael Sammy Gideon",
-    "email": "misael.sammy@simaju.ac.id",
+    "name": "Alex Pratama",
+    "email": "alex.pratama@simaju.app",
     "password": "RahasiaPassword123!",
-    "instansi": "Universitas Dian Nuswantoro",
+    "instansi": "Divisi Teknologi Informasi",
     "default_reminder_minutes": 15,
     "theme": "dark"
   }
@@ -158,9 +156,9 @@ erDiagram
     "message": "Registrasi pengguna berhasil",
     "data": {
       "user_id": 1,
-      "name": "Misael Sammy Gideon",
-      "email": "misael.sammy@simaju.ac.id",
-      "instansi": "Universitas Dian Nuswantoro"
+      "name": "Alex Pratama",
+      "email": "alex.pratama@simaju.app",
+      "instansi": "Divisi Teknologi Informasi"
     }
   }
   ```
@@ -179,7 +177,7 @@ erDiagram
 - **Request Body** :
   ```json
   {
-    "email": "misael.sammy@simaju.ac.id",
+    "email": "alex.pratama@simaju.app",
     "password": "RahasiaPassword123!"
   }
   ```
@@ -189,9 +187,9 @@ erDiagram
     "message": "Login berhasil",
     "data": {
       "user_id": 1,
-      "name": "Misael Sammy Gideon",
-      "email": "misael.sammy@simaju.ac.id",
-      "instansi": "Universitas Dian Nuswantoro"
+      "name": "Alex Pratama",
+      "email": "alex.pratama@simaju.app",
+      "instansi": "Divisi Teknologi Informasi"
     }
   }
   ```
@@ -214,9 +212,9 @@ erDiagram
     "message": "Berhasil mengambil profil pengguna",
     "data": {
       "user_id": 1,
-      "name": "Misael Sammy Gideon",
-      "email": "misael.sammy@simaju.ac.id",
-      "instansi": "Universitas Dian Nuswantoro",
+      "name": "Alex Pratama",
+      "email": "alex.pratama@simaju.app",
+      "instansi": "Divisi Teknologi Informasi",
       "default_reminder_minutes": 15,
       "theme": "dark"
     }
@@ -237,8 +235,8 @@ erDiagram
 - **Request Body** :
   ```json
   {
-    "name": "Misael Sammy Gideon, S.Kom.",
-    "instansi": "Pusat Riset Teknologi Informasi",
+    "name": "Alex Pratama, S.Kom.",
+    "instansi": "Pusat Riset Data",
     "default_reminder_minutes": 30,
     "theme": "light"
   }
@@ -249,9 +247,9 @@ erDiagram
     "message": "Profil pengguna berhasil diperbarui",
     "data": {
       "user_id": 1,
-      "name": "Misael Sammy Gideon, S.Kom.",
-      "email": "misael.sammy@simaju.ac.id",
-      "instansi": "Pusat Riset Teknologi Informasi",
+      "name": "Alex Pratama, S.Kom.",
+      "email": "alex.pratama@simaju.app",
+      "instansi": "Pusat Riset Data",
       "default_reminder_minutes": 30,
       "theme": "light"
     }
@@ -283,7 +281,7 @@ erDiagram
       {
         "event_id": 1,
         "user_id": 1,
-        "user_name": "Misael Sammy Gideon",
+        "user_name": "Alex Pratama",
         "group_id": 1,
         "group_name": "Tim Pengembang SIMAJU",
         "pattern_id": null,
@@ -344,8 +342,8 @@ erDiagram
     "data": {
       "event_id": 1,
       "user_id": 1,
-      "user_name": "Misael Sammy Gideon",
-      "user_email": "misael.sammy@simaju.ac.id",
+      "user_name": "Alex Pratama",
+      "user_email": "alex.pratama@simaju.app",
       "group_id": 1,
       "group_name": "Tim Pengembang SIMAJU",
       "pattern_id": null,
@@ -499,7 +497,7 @@ erDiagram
         "group_id": 1,
         "group_name": "Tim Pengembang SIMAJU",
         "created_by": 1,
-        "creator_name": "Misael Sammy Gideon",
+        "creator_name": "Alex Pratama",
         "total_members": 2
       }
     ]
@@ -610,8 +608,8 @@ erDiagram
         "remind_at": "2026-11-01T08:45:00.000Z",
         "is_sent": false,
         "notification_type": "email",
-        "user_name": "Misael Sammy Gideon",
-        "user_email": "misael.sammy@simaju.ac.id"
+        "user_name": "Alex Pratama",
+        "user_email": "alex.pratama@simaju.app"
       }
     ]
   }
